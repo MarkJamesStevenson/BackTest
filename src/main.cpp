@@ -2,6 +2,7 @@
 #include "BackTester/ievent.h"
 #include "BackTester/marketevent.h"
 #include <iostream>
+#include <cassert>
 
 int main(int argc, char *argv[])
 {
@@ -14,8 +15,17 @@ int main(int argc, char *argv[])
             case IEvent::Event_Type::MARKET_EVENT :
                 std::cout << "market event" << std::endl;
                 break;
+            case IEvent::Event_Type::FILL_EVENT :
+                std::cout << "fill event" << std::endl;
+                break;
+            case IEvent::Event_Type::ORDER_EVENT :
+                std::cout << "order event" << std::endl;
+                break;
+            case IEvent::Event_Type::SIGNAL_EVENT :
+                std::cout << "signal event" << std::endl;
+                break;
             default :
-                std::cout << "do not recognise the event type" << std::endl;
+                assert(false && "You need to add the event type here");
                 break;
         }
     }
