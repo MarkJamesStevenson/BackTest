@@ -2,13 +2,12 @@
 #define FILLEVENT_H
 
 #include "ievent.h"
-#include "memory"
 /*
  * Event for when an order is filled, stores
  * the quantity filled and at what price.
+ * TODO : decide the best way to handle commission charges
+ * may be best to have a IBroker class.
  */
-
-
 class FillEvent : public IEvent
 {
 public:
@@ -29,11 +28,10 @@ public:
         commission = commissionCalculation();
     }
 
-    double getCommission() const
+    double GetCommission() const
     {
         return commission;
     }
-
 
 private:
     std::string symbol;

@@ -7,5 +7,5 @@ TEST (FillEvent, Create) {
     {
         return 19.0;
     });
-    EXPECT_EQ(e.getCommission(), 19.0);
+    EXPECT_EQ(e.GetCommission(), 19.0);
 }
