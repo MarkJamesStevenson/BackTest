@@ -13,6 +13,21 @@ public:
         FILL_EVENT
     };
 
+    enum class Direction {
+        BUY,
+        SELL
+    };
+
+    enum class OrderType {
+        MKT, //Market order
+        LIM  //Limit order
+    };
+
+    enum class SignalType {
+        LONG,
+        SHORT
+    };
+
     IEvent(Event_Type e) : event(e) {}
 
     virtual ~IEvent() = default;

@@ -3,6 +3,10 @@
 
 #include "ievent.h"
 
+/*
+ * Creates the market event when new market data has
+ * been received
+ */
 class MarketEvent : public IEvent
 {
 public:

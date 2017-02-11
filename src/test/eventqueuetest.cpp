@@ -25,9 +25,14 @@ TEST (EventQueue, AddEvent) {
 
 TEST (EventQueue, AddMultipleEvents) {
     std::unique_ptr<IEvent> event1 = std::make_unique<MarketEvent>();
-    std::unique_ptr<IEvent> event2 = std::make_unique<FillEvent>();
-    std::unique_ptr<IEvent> event3 = std::make_unique<OrderEvent>();
-    std::unique_ptr<IEvent> event4 = std::make_unique<SignalEvent>();
+    std::unique_ptr<IEvent> event2 =
+            std::make_unique<FillEvent>("BLMB", "LSE", 10, IEvent::Direction::BUY, 30.4, [] ()
+    {
+        return 19.0;
+    });
+    std::unique_ptr<IEvent> event3 =
+            std::make_unique<OrderEvent>("BLMB", IEvent::OrderType::LIM, 10, IEvent::Direction::SELL);
+    std::unique_ptr<IEvent> event4 = std::make_unique<SignalEvent>("BLMB", IEvent::SignalType::LONG);
     EventQueue eventQueue;
     eventQueue.AddEvent(std::move(event1));
     eventQueue.AddEvent(std::move(event2));
@@ -44,3 +49,4 @@ TEST (EventQueue, AddMultipleEvents) {
     EXPECT_EQ(gotEvent4->GetEventType(), IEvent::Event_Type::SIGNAL_EVENT);
     ASSERT_TRUE(eventQueue.IsEmpty());
 }
+
