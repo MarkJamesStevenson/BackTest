@@ -6,12 +6,11 @@
 int main(int argc, char *argv[])
 {
     EventQueue eventQueue;
-
-    eventQueue.AddEvent(std::make_unique<MarketEvent>());
+    eventQueue.AddEvent(EventHandle(IEvent::Event_Type::MARKET_EVENT));
     if (!eventQueue.IsEmpty())
     {
-        std::unique_ptr<IEvent> event = std::move(eventQueue.GetNextEvent());
-        switch (event->getEventType()){
+        EventHandle event = eventQueue.GetNextEvent();
+        switch (event.GetEventType()){
             case IEvent::Event_Type::MARKET_EVENT :
                 std::cout << "market event" << std::endl;
                 break;

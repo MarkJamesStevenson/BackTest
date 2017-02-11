@@ -11,8 +11,8 @@ TEST (EventQueue, EmptyQueue) {
 }
 
 TEST (EventQueue, AddEvent) {
-    std::unique_ptr<IEvent> event = std::make_unique<MarketEvent>();
+    std::shared_ptr<IEvent> event = std::make_shared<MarketEvent>();
     EventQueue eventQueue;
-    eventQueue.AddEvent(std::move(event));
+    //eventQueue.AddEvent(std::move(event));
     ASSERT_FALSE(eventQueue.IsEmpty());
 }

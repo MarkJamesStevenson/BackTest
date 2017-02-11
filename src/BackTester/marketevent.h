@@ -8,7 +8,7 @@ class MarketEvent : public IEvent
 public:
     MarketEvent() = default;
 
-    virtual Event_Type getEventType()
+    virtual Event_Type GetEventType() const override
     {
         return event;
     }

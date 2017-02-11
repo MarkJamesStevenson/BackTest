@@ -1,18 +1,19 @@
 #include "eventqueue.h"
+#include "ievent.h"
 
-void EventQueue::AddEvent(std::unique_ptr<IEvent> event)
+void EventQueue::AddEvent(EventHandle&& event)
 {
     queue.push(std::move(event));
 }
 
-std::unique_ptr<IEvent> EventQueue::GetNextEvent()
+EventHandle EventQueue::GetNextEvent()
 {
-    std::unique_ptr<IEvent> event = std::move(queue.front());
+    EventHandle event = std::move(queue.front());
     queue.pop();
     return event;
 }
 
-bool EventQueue::IsEmpty()
+bool EventQueue::IsEmpty() const
 {
     return queue.empty();
 }
