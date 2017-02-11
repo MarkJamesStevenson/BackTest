@@ -6,15 +6,7 @@
 class FillEvent : public IEvent
 {
 public:
-    FillEvent() = default;
-
-    virtual Event_Type GetEventType() const override
-    {
-        return event;
-    }
-
-private:
-    Event_Type event = Event_Type::FILL_EVENT;
+    FillEvent() : IEvent(Event_Type::FILL_EVENT) {}
 };
 
 #endif // FILLEVENT_H

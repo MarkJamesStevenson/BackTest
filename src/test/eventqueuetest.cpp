@@ -37,7 +37,7 @@ TEST (EventQueue, AddMultipleEvents) {
     std::unique_ptr<IEvent> gotEvent1 = eventQueue.GetNextEvent();
     EXPECT_EQ(gotEvent1->GetEventType(), IEvent::Event_Type::MARKET_EVENT);
     std::unique_ptr<IEvent> gotEvent2 = eventQueue.GetNextEvent();
-    EXPECT_EQ(gotEvent2->GetEventType(), IEvent::Event_Type::MARKET_EVENT);
+    EXPECT_EQ(gotEvent2->GetEventType(), IEvent::Event_Type::FILL_EVENT);
     std::unique_ptr<IEvent> gotEvent3 = eventQueue.GetNextEvent();
     EXPECT_EQ(gotEvent3->GetEventType(), IEvent::Event_Type::ORDER_EVENT);
     std::unique_ptr<IEvent> gotEvent4 = eventQueue.GetNextEvent();

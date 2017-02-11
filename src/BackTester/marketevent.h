@@ -6,15 +6,7 @@
 class MarketEvent : public IEvent
 {
 public:
-    MarketEvent() = default;
-
-    virtual Event_Type GetEventType() const override
-    {
-        return event;
-    }
-
-private:
-    Event_Type event = Event_Type::MARKET_EVENT;
+    MarketEvent() : IEvent(Event_Type::MARKET_EVENT) {}
 };
 
 #endif // MARKETEVENT_H

@@ -6,15 +6,7 @@
 class OrderEvent : public IEvent
 {
 public:
-    OrderEvent() = default;
-
-    virtual Event_Type GetEventType() const override
-    {
-        return event;
-    }
-
-private:
-    Event_Type event = Event_Type::ORDER_EVENT;
+    OrderEvent() : IEvent(Event_Type::ORDER_EVENT) {}
 };
 
 #endif // ORDEREVENT_H

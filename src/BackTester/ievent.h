@@ -4,9 +4,6 @@
 class IEvent
 {
 public:
-    IEvent() = default;
-
-    virtual ~IEvent() = default;
 
     enum class Event_Type
     {
@@ -16,7 +13,17 @@ public:
         FILL_EVENT
     };
 
-    virtual Event_Type GetEventType() const = 0;
+    IEvent(Event_Type e) : event(e) {}
+
+    virtual ~IEvent() = default;
+
+    Event_Type GetEventType() const
+    {
+        return event;
+    }
+
+protected:
+    Event_Type event;
 };
 
 #endif // IEVENT_H
