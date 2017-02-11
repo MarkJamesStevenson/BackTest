@@ -14,7 +14,7 @@ public:
 
     std::unique_ptr<IEvent> GetNextEvent();
 
-    bool IsEmpty();
+    bool IsEmpty() const;
 
 private:
     std::queue<std::unique_ptr<IEvent>> queue;

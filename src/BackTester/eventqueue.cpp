@@ -12,7 +12,7 @@ std::unique_ptr<IEvent> EventQueue::GetNextEvent()
     return event;
 }
 
-bool EventQueue::IsEmpty()
+bool EventQueue::IsEmpty() const
 {
     return queue.empty();
 }
