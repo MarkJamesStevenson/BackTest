@@ -10,9 +10,11 @@ class EventQueue
 public:
     EventQueue() = default;
 
-    void AddEventToQueue(std::unique_ptr<IEvent> event);
+    void AddEvent(std::unique_ptr<IEvent> event);
 
     std::unique_ptr<IEvent> GetNextEvent();
+
+    bool IsEmpty();
 
 private:
     std::queue<std::unique_ptr<IEvent>> queue;

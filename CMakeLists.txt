@@ -26,13 +26,18 @@ if (CMAKE_VERSION VERSION_LESS 2.8.11)
   include_directories("${gtest_SOURCE_DIR}/include"
                       "${gmock_SOURCE_DIR}/include")
 endif()
- 
+
 # Now simply link your own targets against gtest, gmock,
 # etc. as appropriate
-
-file(GLOB_RECURSE sources      src/main/*.cpp src/main/*.h)
+file(GLOB_RECURSE sources      src/BackTester/*.cpp src/BackTester/*.h)
 file(GLOB_RECURSE sources_test src/test/*.cpp)
 
-add_executable(${PROJECT_NAME} ${sources})
+add_library (BackTester ${sources})
+target_include_directories (BackTester PUBLIC ${sources})
+
+add_executable(${PROJECT_NAME} src/main.cpp)
+target_link_libraries(${PROJECT_NAME} BackTester)
+
 add_executable(test_runner ${sources_test})
 target_link_libraries(test_runner gtest_main)
+target_link_libraries(test_runner BackTester)
