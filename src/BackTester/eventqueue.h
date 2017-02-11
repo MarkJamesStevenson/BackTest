@@ -3,21 +3,21 @@
 
 #include <queue>
 #include <memory>
-#include "eventhandle.h"
+#include "ievent.h"
 
 class EventQueue
 {
 public:
     EventQueue() = default;
 
-    void AddEvent(EventHandle&& event);
+    void AddEvent(std::unique_ptr<IEvent> event);
 
-    EventHandle GetNextEvent();
+    std::unique_ptr<IEvent> GetNextEvent();
 
-    bool IsEmpty() const;
+    bool IsEmpty();
 
 private:
-    std::queue<EventHandle> queue;
+    std::queue<std::unique_ptr<IEvent>> queue;
 };
 
 #endif // EVENTQUEUE_H

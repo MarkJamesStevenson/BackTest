@@ -16,7 +16,7 @@ public:
         FILL_EVENT
     };
 
-    virtual Event_Type GetEventType() const = 0;
+    virtual Event_Type getEventType() = 0;
 };
 
 #endif // IEVENT_H

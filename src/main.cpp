@@ -2,30 +2,21 @@
 #include "BackTester/ievent.h"
 #include "BackTester/marketevent.h"
 #include <iostream>
-#include <cassert>
 
 int main(int argc, char *argv[])
 {
     EventQueue eventQueue;
-    eventQueue.AddEvent(EventHandle(IEvent::Event_Type::MARKET_EVENT));
+
+    eventQueue.AddEvent(std::make_unique<MarketEvent>());
     if (!eventQueue.IsEmpty())
     {
-        EventHandle event = eventQueue.GetNextEvent();
-        switch (event.GetEventType()){
+        std::unique_ptr<IEvent> event = std::move(eventQueue.GetNextEvent());
+        switch (event->getEventType()){
             case IEvent::Event_Type::MARKET_EVENT :
                 std::cout << "market event" << std::endl;
                 break;
-            case IEvent::Event_Type::FILL_EVENT :
-                std::cout << "fill event" << std::endl;
-                break;
-            case IEvent::Event_Type::ORDER_EVENT :
-                std::cout << "order event" << std::endl;
-                break;
-            case IEvent::Event_Type::SIGNAL_EVENT :
-                std::cout << "signal event" << std::endl;
-                break;
             default :
-                assert(false && "You need to add the event type here");
+                std::cout << "do not recognise the event type" << std::endl;
                 break;
         }
     }
