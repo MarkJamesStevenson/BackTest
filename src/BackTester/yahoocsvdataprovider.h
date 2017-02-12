@@ -8,6 +8,8 @@ class YahooCSVDataProvider : public DataProvider
 public:
     YahooCSVDataProvider() = default;
 
+    void DownloadData() override;
+
     void UpdateBars() override;
 };
 

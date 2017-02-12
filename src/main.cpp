@@ -1,4 +1,6 @@
 #include "BackTester/eventqueue.h"
+#include "BackTester/dataprovider.h"
+#include "BackTester/yahoocsvdataprovider.h"
 #include "BackTester/ievent.h"
 #include "BackTester/marketevent.h"
 #include <iostream>
@@ -7,6 +9,8 @@
 int main(int argc, char *argv[])
 {
     EventQueue eventQueue;
+    std::unique_ptr<DataProvider> dataProvider(std::make_unique<YahooCSVDataProvider>());
+    dataProvider->Initialise();
 
     eventQueue.AddEvent(std::make_unique<MarketEvent>());
     if (!eventQueue.IsEmpty())
