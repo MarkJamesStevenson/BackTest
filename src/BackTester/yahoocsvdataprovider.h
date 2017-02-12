@@ -1,14 +1,14 @@
 #ifndef YAHOOCSVDATAPROVIDER_H
 #define YAHOOCSVDATAPROVIDER_H
 
-#include "datahandler.h"
+#include "dataprovider.h"
 
-class YahooCSVDataProvider : public DataHandler
+class YahooCSVDataProvider : public DataProvider
 {
 public:
     YahooCSVDataProvider() = default;
 
-    void UpdateBars();
+    void UpdateBars() override;
 };
 
 #endif // YAHOOCSVDATAPROVIDER_H

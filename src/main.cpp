@@ -17,14 +17,14 @@ int main(int argc, char *argv[])
                 std::cout << "market event" << std::endl;
                 break;
             case IEvent::Event_Type::FILL_EVENT :
-                 std::cout << "fill event" << std::endl;
-                 break;
-             case IEvent::Event_Type::ORDER_EVENT :
-                 std::cout << "order event" << std::endl;
-                 break;
-             case IEvent::Event_Type::SIGNAL_EVENT :
-                 std::cout << "signal event" << std::endl;
-                 break;
+                std::cout << "fill event" << std::endl;
+                break;
+            case IEvent::Event_Type::ORDER_EVENT :
+                std::cout << "order event" << std::endl;
+                break;
+            case IEvent::Event_Type::SIGNAL_EVENT :
+                std::cout << "signal event" << std::endl;
+                break;
             default :
                 assert(false && "Do not recognise the event type");
                 break;

@@ -1,13 +1,13 @@
-#ifndef DATAHANDLER_H
-#define DATAHANDLER_H
+#ifndef DATAPROVIDER_H
+#define DATAPROVIDER_H
 
 
-class DataHandler
+class DataProvider
 {
 public:
-    DataHandler();
+    DataProvider() = default;
 
-    void UpdateBars() = 0;
+    virtual void UpdateBars() = 0;
 };
 
-#endif // DATAHANDLER_H
+#endif // DATAPROVIDER_H

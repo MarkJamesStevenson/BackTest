@@ -1,6 +1,5 @@
 #include <gtest/gtest.h>
 #include <memory>
-#include <iostream>
 #include "../BackTester/eventqueue.h"
 #include "../BackTester/marketevent.h"
 #include "../BackTester/signalevent.h"
