@@ -10,7 +10,7 @@ int main(int argc, char *argv[])
 {
     EventQueue eventQueue;
     std::unique_ptr<DataProvider> dataProvider(std::make_unique<YahooCSVDataProvider>());
-    dataProvider->Initialise();
+    dataProvider->Initialise("FDSA.L");
 
     eventQueue.AddEvent(std::make_unique<MarketEvent>());
     if (!eventQueue.IsEmpty())

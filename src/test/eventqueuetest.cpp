@@ -14,7 +14,7 @@ TEST (EventQueue, EmptyQueue) {
 
 TEST (EventQueue, TryToGetNextEventWithEmptyQueue) {
     EventQueue eventQueue;
-    ASSERT_DEATH(std::unique_ptr<IEvent> event = eventQueue.GetNextEvent(), "Should not call with empty ");
+    ASSERT_DEATH(std::unique_ptr<IEvent> event = eventQueue.GetNextEvent(), "Should not call with empty queue");
 }
 
 TEST (EventQueue, AddEvent) {

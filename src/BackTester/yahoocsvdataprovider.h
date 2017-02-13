@@ -10,17 +10,19 @@ class YahooCSVDataProvider : public DataProvider
 public:
     YahooCSVDataProvider() = default;
 
-    bool UrlParser(const std::string& ID, const int& fromMonth, const int& fromDay, const int& fromYear, const int& toMonth, const int& toDay, const int& toYear, char tradingPeriod);
-
-    void DownloadData() override;
+    void Initialise(std::string symbol) override;
 
     void UpdateBars() override;
 
 private:
-    CURL *curl;
-    CURLcode result;
+    std::string ConstructUrl(const std::string& symbol,
+                             int fromMonth,
+                             int fromDay,
+                             int fromYear,
+                             int toMonth,
+                             int toDay,
+                             int toYear,
+                             char tradingPeriod);
 };
-
-size_t my_write_func(void *ptr, size_t size, size_t nmemb, FILE *stream);
 
 #endif // YAHOOCSVDATAPROVIDER_H
