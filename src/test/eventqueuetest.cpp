@@ -12,6 +12,11 @@ TEST (EventQueue, EmptyQueue) {
     EXPECT_TRUE(eventQueue.IsEmpty());
 }
 
+TEST (EventQueue, TryToGetNextEventWithEmptyQueue) {
+    EventQueue eventQueue;
+    ASSERT_DEATH(std::unique_ptr<IEvent> event = eventQueue.GetNextEvent(), "Should not call with empty ");
+}
+
 TEST (EventQueue, AddEvent) {
     std::unique_ptr<IEvent> event = std::make_unique<MarketEvent>();
     EventQueue eventQueue;
