@@ -21,7 +21,6 @@ size_t HTTPDownloader::WriteData(void *ptr, size_t size, size_t nmemb, void *str
 
 std::string HTTPDownloader::Download(const std::string &url)
 {
-    std::cout << "url is " << url;
     std::stringstream out;
     if (curl)
     {

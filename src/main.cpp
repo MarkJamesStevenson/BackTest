@@ -12,7 +12,6 @@ int main(int argc, char *argv[])
     std::unique_ptr<DataProvider> dataProvider(std::make_unique<YahooCSVDataProvider>());
     dataProvider->Initialise("FDSA.L");
 
-    eventQueue.AddEvent(std::make_unique<MarketEvent>());
     if (!eventQueue.IsEmpty())
     {
         std::unique_ptr<IEvent> event = eventQueue.GetNextEvent();

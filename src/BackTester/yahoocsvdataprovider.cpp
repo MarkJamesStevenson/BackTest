@@ -7,7 +7,7 @@
 
 void YahooCSVDataProvider::Initialise(std::string symbol)
 {
-    std::cout << "Downloading the stock data" << std::endl;
+    std::cout << "Downloading the stock data for " << symbol << std::endl;
     std::string url = ConstructUrl(symbol, 1, 1, 2000, 1, 1, 2017, 'd');
     HTTPDownloader downloader;
     std::string stockData;
