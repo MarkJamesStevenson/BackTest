@@ -13,9 +13,9 @@ HTTPDownloader::~HTTPDownloader()
     curl_easy_cleanup(curl);
 }
 
-size_t HTTPDownloader::WriteData(void *ptr, size_t size, size_t nmemb, void *stream) {
-    std::string data(static_cast<const char*>(ptr), (size_t) size * nmemb);
-    *(static_cast<std::stringstream*>(stream)) << data;
+size_t HTTPDownloader::WriteData(const char *ptr, size_t size, size_t nmemb, std::stringstream *stream) {
+    std::string data(ptr, static_cast<size_t>(size * nmemb));
+    *stream << data;
     return size * nmemb;
 }
 
