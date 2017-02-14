@@ -14,11 +14,11 @@ TEST (EventQueue, EmptyQueue) {
 
 TEST (EventQueue, TryToGetNextEventWithEmptyQueue) {
     EventQueue eventQueue;
-    ASSERT_DEATH(std::unique_ptr<IEvent> event = eventQueue.GetNextEvent(), "Should not call with empty queue");
+    ASSERT_DEATH(auto event = eventQueue.GetNextEvent(), "Should not call with empty queue");
 }
 
 TEST (EventQueue, AddEvent) {
-    std::unique_ptr<IEvent> event = std::make_unique<MarketEvent>();
+    auto event = std::make_unique<MarketEvent>();
     EventQueue eventQueue;
     eventQueue.AddEvent(std::move(event));
     EXPECT_FALSE(eventQueue.IsEmpty());
@@ -28,28 +28,26 @@ TEST (EventQueue, AddEvent) {
 }
 
 TEST (EventQueue, AddMultipleEvents) {
-    std::unique_ptr<IEvent> event1 = std::make_unique<MarketEvent>();
-    std::unique_ptr<IEvent> event2 =
-            std::make_unique<FillEvent>("BLMB", "LSE", 10, IEvent::Direction::BUY, 30.4, [] ()
+    auto event1 = std::make_unique<MarketEvent>();
+    auto event2 = std::make_unique<FillEvent>("BLMB", "LSE", 10, IEvent::Direction::BUY, 30.4, [] ()
     {
         return 19.0;
     });
-    std::unique_ptr<IEvent> event3 =
-            std::make_unique<OrderEvent>("BLMB", IEvent::OrderType::LIM, 10, IEvent::Direction::SELL);
-    std::unique_ptr<IEvent> event4 = std::make_unique<SignalEvent>("BLMB", IEvent::SignalType::LONG);
+    auto event3 = std::make_unique<OrderEvent>("BLMB", IEvent::OrderType::LIM, 10, IEvent::Direction::SELL);
+    auto event4 = std::make_unique<SignalEvent>("BLMB", IEvent::SignalType::LONG);
     EventQueue eventQueue;
     eventQueue.AddEvent(std::move(event1));
     eventQueue.AddEvent(std::move(event2));
     eventQueue.AddEvent(std::move(event3));
     eventQueue.AddEvent(std::move(event4));
     EXPECT_FALSE(eventQueue.IsEmpty());
-    std::unique_ptr<IEvent> gotEvent1 = eventQueue.GetNextEvent();
+    auto gotEvent1 = eventQueue.GetNextEvent();
     EXPECT_EQ(gotEvent1->GetEventType(), IEvent::Event_Type::MARKET_EVENT);
-    std::unique_ptr<IEvent> gotEvent2 = eventQueue.GetNextEvent();
+    auto gotEvent2 = eventQueue.GetNextEvent();
     EXPECT_EQ(gotEvent2->GetEventType(), IEvent::Event_Type::FILL_EVENT);
-    std::unique_ptr<IEvent> gotEvent3 = eventQueue.GetNextEvent();
+    auto gotEvent3 = eventQueue.GetNextEvent();
     EXPECT_EQ(gotEvent3->GetEventType(), IEvent::Event_Type::ORDER_EVENT);
-    std::unique_ptr<IEvent> gotEvent4 = eventQueue.GetNextEvent();
+    auto gotEvent4 = eventQueue.GetNextEvent();
     EXPECT_EQ(gotEvent4->GetEventType(), IEvent::Event_Type::SIGNAL_EVENT);
     ASSERT_TRUE(eventQueue.IsEmpty());
 }

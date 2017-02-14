@@ -9,7 +9,7 @@ void EventQueue::AddEvent(std::unique_ptr<IEvent> event)
 std::unique_ptr<IEvent> EventQueue::GetNextEvent()
 {
     assert(!IsEmpty() && "Should not call with empty queue");
-    std::unique_ptr<IEvent> event = std::move(queue.front());
+    auto event = std::move(queue.front());
     queue.pop();
     return event;
 }

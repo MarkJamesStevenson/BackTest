@@ -8,7 +8,14 @@
 void YahooCSVDataProvider::Initialise(const std::string &symbol)
 {
     std::cout << "Downloading the stock data for " << symbol << std::endl;
-    std::string url = ConstructUrl(symbol, 1, 1, 2000, 1, 1, 2017, 'd');
+    const std::string url = ConstructUrl(symbol,
+                                         1,
+                                         Month::JANUARY,
+                                         2000,
+                                         1,
+                                         Month::JANUARY,
+                                         2017,
+                                         TradingPeriod::DAY);
     HTTPDownloader downloader;
     std::string stockData;
     try {
@@ -26,24 +33,24 @@ void YahooCSVDataProvider::UpdateBars()
 
 }
 
-std::string YahooCSVDataProvider::ConstructUrl(const std::string& symbol,
-                                               int fromMonth,
-                                               int fromDay,
-                                               int fromYear,
-                                               int toMonth,
-                                               int toDay,
-                                               int toYear,
-                                               char tradingPeriod)
+std::string ConstructUrl(const std::string& symbol,
+                         int fromDay,
+                         YahooCSVDataProvider::Month fromMonth,
+                         int fromYear,
+                         int toDay,
+                         YahooCSVDataProvider::Month toMonth,
+                         int toYear,
+                         YahooCSVDataProvider::TradingPeriod tradingPeriod)
 {
-    std::string url = "http://real-chart.finance.yahoo.com/table.csv?s=" +
+    const std::string url = "http://real-chart.finance.yahoo.com/table.csv?s=" +
     symbol +
-    "&a=" + std::to_string(fromMonth - 1) +
+    "&a=" + std::to_string(static_cast<int>(fromMonth)) +
     "&b=" + std::to_string(fromDay) +
     "&c=" + std::to_string(fromYear) +
-    "&d=" + std::to_string(toMonth - 1) +
+    "&d=" + std::to_string(static_cast<int>(toMonth)) +
     "&e=" + std::to_string(toDay) +
     "&f=" + std::to_string(toYear) +
-    "&g=" + tradingPeriod +
+    "&g=" + static_cast<char>(tradingPeriod) +
     "&ignore=.csv";
     return url;
 }

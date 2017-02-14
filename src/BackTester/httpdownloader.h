@@ -18,7 +18,7 @@ public:
     HTTPDownloader& operator=(const HTTPDownloader&) = delete;
 
 private:
-    static size_t WriteData(const char *ptr, size_t size, size_t nmemb, std::stringstream *stream);
+    static size_t WriteData(const char *ptr, size_t size, size_t nmemb, void *stream);
 
     CURL* curl;
 };

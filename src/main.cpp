@@ -9,28 +9,30 @@
 int main(int argc, char *argv[])
 {
     EventQueue eventQueue;
-    std::unique_ptr<DataProvider> dataProvider(std::make_unique<YahooCSVDataProvider>());
+    auto dataProvider(std::make_unique<YahooCSVDataProvider>());
     dataProvider->Initialise("FDSA.L");
 
     if (!eventQueue.IsEmpty())
     {
         std::unique_ptr<IEvent> event = eventQueue.GetNextEvent();
-        switch (event->GetEventType()){
-            case IEvent::Event_Type::MARKET_EVENT :
-                std::cout << "market event" << std::endl;
-                break;
-            case IEvent::Event_Type::FILL_EVENT :
-                std::cout << "fill event" << std::endl;
-                break;
-            case IEvent::Event_Type::ORDER_EVENT :
-                std::cout << "order event" << std::endl;
-                break;
-            case IEvent::Event_Type::SIGNAL_EVENT :
-                std::cout << "signal event" << std::endl;
-                break;
-            default :
-                assert(false && "Do not recognise the event type");
-                break;
+        if (event) {
+            switch (event->GetEventType()){
+                case IEvent::Event_Type::MARKET_EVENT :
+                    std::cout << "market event" << std::endl;
+                    break;
+                case IEvent::Event_Type::FILL_EVENT :
+                    std::cout << "fill event" << std::endl;
+                    break;
+                case IEvent::Event_Type::ORDER_EVENT :
+                    std::cout << "order event" << std::endl;
+                    break;
+                case IEvent::Event_Type::SIGNAL_EVENT :
+                    std::cout << "signal event" << std::endl;
+                    break;
+                default :
+                    assert(false && "Do not recognise the event type");
+                    break;
+            }
         }
     }
 }

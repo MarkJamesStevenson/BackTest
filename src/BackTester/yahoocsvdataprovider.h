@@ -10,19 +10,38 @@ class YahooCSVDataProvider : public DataProvider
 public:
     YahooCSVDataProvider() = default;
 
+    enum class Month {
+        JANUARY = 0,
+        FEBRUARY,
+        MARCH,
+        APRIL,
+        MAY,
+        JUNE,
+        JULY,
+        AUGUST,
+        SEPTEMBER,
+        OCTOBER,
+        NOVEMBER,
+        DECEMBER
+    };
+
+    enum class TradingPeriod {
+        DAY = 'd',
+        MONTH = 'm'
+    };
+
     void Initialise(const std::string& symbol) override;
 
     void UpdateBars() override;
-
-private:
-    std::string ConstructUrl(const std::string& symbol,
-                             int fromMonth,
-                             int fromDay,
-                             int fromYear,
-                             int toMonth,
-                             int toDay,
-                             int toYear,
-                             char tradingPeriod);
 };
+
+std::string ConstructUrl(const std::string& symbol,
+                         int fromDay,
+                         YahooCSVDataProvider::Month fromMonth,
+                         int fromYear,
+                         int toDay,
+                         YahooCSVDataProvider::Month toMonth,
+                         int toYear,
+                         YahooCSVDataProvider::TradingPeriod);
 
 #endif // YAHOOCSVDATAPROVIDER_H
