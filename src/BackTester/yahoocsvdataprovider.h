@@ -10,7 +10,7 @@ class YahooCSVDataProvider : public DataProvider
 public:
     YahooCSVDataProvider() = default;
 
-    void Initialise(std::string symbol) override;
+    void Initialise(const std::string& symbol) override;
 
     void UpdateBars() override;
 
