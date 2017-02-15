@@ -14,12 +14,8 @@ void YahooCSVDataProvider::Initialise(const std::string &symbol)
 {
     std::cout << "Downloading the stock data for " << symbol << std::endl;
     const std::string url = ConstructUrl(symbol,
-                                         1,
-                                         Month::JANUARY,
-                                         2000,
-                                         1,
-                                         Month::JANUARY,
-                                         2017,
+                                         1, Month::JANUARY, 2000,
+                                         1, Month::JANUARY, 2017,
                                          TradingPeriod::DAY);
     HTTPDownloader downloader;
     std::string stockData = downloader.Download(url);
@@ -28,7 +24,7 @@ void YahooCSVDataProvider::Initialise(const std::string &symbol)
 
 void YahooCSVDataProvider::PopulateBars(const std::string &stockData)
 {
-    std::stringstream stream(stockData);
+    std::istringstream stream(stockData);
     std::string line;
     bool header = true;
     while (std::getline(stream, line))
@@ -40,7 +36,7 @@ void YahooCSVDataProvider::PopulateBars(const std::string &stockData)
         }
         else
         {
-            const std::vector<std::string> data = StringUtils::Split(line, ',');
+            const std::vector<std::string> data = StringUtils::Split(line);
             if (data.size() != 7)
             {
                 throw std::range_error(std::string("Vector should be of size 7. Received: " + data.size()));

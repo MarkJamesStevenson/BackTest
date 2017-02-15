@@ -2,9 +2,7 @@
 #include "BackTester/dataprovider.h"
 #include "BackTester/yahoocsvdataprovider.h"
 #include "BackTester/event.h"
-#include "BackTester/marketevent.h"
 #include <iostream>
-#include <cassert>
 #include <stdlib.h>
 #include <memory>
 #include <chrono>
@@ -13,17 +11,17 @@
 int main(int argc, char *argv[])
 {
     EventQueue eventQueue;
-    auto dataProvider(std::make_unique<YahooCSVDataProvider>());
+    YahooCSVDataProvider dataProvider;
     try {
-        dataProvider->Initialise("FDSA.L");
+        dataProvider.Initialise("GOOGL");
     } catch (const std::exception& e) {
         std::cout << "Unable to continue as could not initialise data provider\n"
-                  << e.what();
+                  << e.what() << "\n";
         exit(EXIT_FAILURE);
     }
-    while (dataProvider->DataAvailable())
+    while (dataProvider.DataAvailable())
     {
-        dataProvider->UpdateBars(eventQueue);
+        dataProvider.UpdateBars(eventQueue);
         while (!eventQueue.IsEmpty())
         {
             std::unique_ptr<Event> event = eventQueue.GetNextEvent();
@@ -31,8 +29,8 @@ int main(int argc, char *argv[])
                 event->DoAction();
             }
         }
-        std::cout << "sleeping for 2 seconds" << std::endl;
-        std::this_thread::sleep_for (std::chrono::seconds(2));
+        std::cout << "sleeping for 0.2 seconds" << std::endl;
+        std::this_thread::sleep_for(std::chrono::milliseconds(20));
     }
 }
 
