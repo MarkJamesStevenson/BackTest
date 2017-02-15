@@ -18,7 +18,8 @@ TEST (EventQueue, TryToGetNextEventWithEmptyQueue) {
 }
 
 TEST (EventQueue, AddEvent) {
-    auto event = std::make_unique<MarketEvent>();
+    OHLCDataPoint data("date",10, 5, 15, 20, 50, 10);
+    auto event = std::make_unique<MarketEvent>(data);
     EventQueue eventQueue;
     eventQueue.AddEvent(std::move(event));
     EXPECT_FALSE(eventQueue.IsEmpty());
@@ -28,7 +29,8 @@ TEST (EventQueue, AddEvent) {
 }
 
 TEST (EventQueue, AddMultipleEvents) {
-    auto event1 = std::make_unique<MarketEvent>();
+    OHLCDataPoint data("date",10, 5, 15, 20, 50, 10);
+    auto event1 = std::make_unique<MarketEvent>(data);
     auto event2 = std::make_unique<FillEvent>("BLMB", "LSE", 10, IEvent::Direction::BUY, 30.4, [] ()
     {
         return 19.0;

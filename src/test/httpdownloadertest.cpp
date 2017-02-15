@@ -2,7 +2,7 @@
 #include "../BackTester/httpdownloader.h"
 
 
-TEST (HTTPDownloader, ) {
+TEST (HTTPDownloader, checkDataConsistency) {
     HTTPDownloader downloader;
     std::string url = "http://real-chart.finance.yahoo.com/table.csv?s=GOOGL&a=1&b=17&c=2016&d=1&e=17&f=2016&g=d&ignore=.csv";
     std::string stockData = downloader.Download(url);

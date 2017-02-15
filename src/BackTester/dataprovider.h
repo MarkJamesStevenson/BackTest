@@ -2,6 +2,9 @@
 #define DATAPROVIDER_H
 
 #include <string>
+#include <vector>
+#include "ohlcdatapoint.h"
+#include "eventqueue.h"
 
 class DataProvider
 {
@@ -15,7 +18,12 @@ public:
     // the required stock data before running.
     virtual void Initialise(const std::string& symbol) {}
 
-    virtual void UpdateBars() = 0;
+    void UpdateBars(EventQueue& eventQueue);
+
+    bool IsEmpty();
+
+protected:
+    std::vector<OHLCDataPoint> bars;
 };
 
 #endif // DATAPROVIDER_H

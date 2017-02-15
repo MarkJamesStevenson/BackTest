@@ -1,7 +1,9 @@
 #include <gtest/gtest.h>
 #include "../BackTester/marketevent.h"
+#include "../BackTester/ohlcdatapoint.h"
 
 TEST (MarketEvent, Create) {
-    MarketEvent mktEvent;
+    OHLCDataPoint data("date",10, 5, 15, 20, 50, 10);
+    MarketEvent mktEvent(data);
     EXPECT_EQ(mktEvent.GetEventType(), MarketEvent::Event_Type::MARKET_EVENT);
 }

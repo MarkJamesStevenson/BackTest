@@ -3,6 +3,7 @@
 
 #include "dataprovider.h"
 #include <string>
+#include <vector>
 #include "curl/curl.h"
 
 class YahooCSVDataProvider : public DataProvider
@@ -32,7 +33,7 @@ public:
 
     void Initialise(const std::string& symbol) override;
 
-    void UpdateBars() override;
+    void PopulateBarsContainer(const std::string& stockData);
 };
 
 std::string ConstructUrl(const std::string& symbol,
@@ -43,5 +44,7 @@ std::string ConstructUrl(const std::string& symbol,
                          YahooCSVDataProvider::Month toMonth,
                          int toYear,
                          YahooCSVDataProvider::TradingPeriod);
+
+std::vector<std::string> SeparateCommaSeparatedString(const std::string &line);
 
 #endif // YAHOOCSVDATAPROVIDER_H
