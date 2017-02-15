@@ -14,12 +14,17 @@ int main(int argc, char *argv[])
 {
     EventQueue eventQueue;
     auto dataProvider(std::make_unique<YahooCSVDataProvider>());
-    dataProvider->Initialise("FDSA.L");
-
-    while (!dataProvider->IsEmpty())
+    try {
+        dataProvider->Initialise("FDSA.L");
+    } catch (const std::exception& e) {
+        std::cout << "Unable to continue as could not initialise data provider\n"
+                  << e.what();
+        exit(EXIT_FAILURE);
+    }
+    while (dataProvider->DataAvailable())
     {
         dataProvider->UpdateBars(eventQueue);
-        if (!eventQueue.IsEmpty())
+        while (!eventQueue.IsEmpty())
         {
             std::unique_ptr<IEvent> event = eventQueue.GetNextEvent();
             if (event) {

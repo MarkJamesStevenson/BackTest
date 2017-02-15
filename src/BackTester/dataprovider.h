@@ -20,7 +20,7 @@ public:
 
     void UpdateBars(EventQueue& eventQueue);
 
-    bool IsEmpty();
+    bool DataAvailable() const;
 
 protected:
     std::vector<OHLCDataPoint> bars;

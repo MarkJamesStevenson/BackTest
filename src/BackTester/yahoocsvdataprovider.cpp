@@ -7,6 +7,8 @@
 #include <sstream>
 #include <vector>
 #include "ohlcdatapoint.h"
+#include "stringutils.h"
+#include <exception>
 
 void YahooCSVDataProvider::Initialise(const std::string &symbol)
 {
@@ -20,18 +22,11 @@ void YahooCSVDataProvider::Initialise(const std::string &symbol)
                                          2017,
                                          TradingPeriod::DAY);
     HTTPDownloader downloader;
-    std::string stockData;
-    try {
-        stockData = downloader.Download(url);
-    } catch (const std::exception& e) {
-        std::cout << "Unable to continue as could not download stock data \n"
-                  << e.what();
-        exit(EXIT_FAILURE);
-    }
-    PopulateBarsContainer(stockData);
+    std::string stockData = downloader.Download(url);
+    PopulateBars(stockData);
 }
 
-void YahooCSVDataProvider::PopulateBarsContainer(const std::string &stockData)
+void YahooCSVDataProvider::PopulateBars(const std::string &stockData)
 {
     std::stringstream stream(stockData);
     std::string line;
@@ -45,29 +40,21 @@ void YahooCSVDataProvider::PopulateBarsContainer(const std::string &stockData)
         }
         else
         {
-            std::vector<std::string> data = SeparateCommaSeparatedString(line);
-            std::string date = data[0];
-            int open = std::stoi(data[1]);
-            int high = std::stoi(data[2]);
-            int low = std::stoi(data[3]);
-            int close = std::stoi(data[4]);
-            int volume = std::stoi(data[5]);
-            int adjClose = std::stoi(data[6]);
-            bars.emplace_back(OHLCDataPoint(date, open, high, low, close, volume, adjClose));
+            const std::vector<std::string> data = StringUtils::Split(line, ',');
+            if (data.size() != 7)
+            {
+                throw std::range_error(std::string("Vector should be of size 7. Received: " + data.size()));
+            }
+            const std::string date = data[0];
+            double open = std::stod(data[1]);
+            double high = std::stod(data[2]);
+            double low = std::stod(data[3]);
+            double close = std::stod(data[4]);
+            double volume = std::stod(data[5]);
+            double adjClose = std::stod(data[6]);
+            bars.emplace_back(date, open, high, low, close, volume, adjClose);
         }
     }
-}
-
-std::vector<std::string> SeparateCommaSeparatedString(const std::string& line)
-{
-    std::stringstream stream(line);
-    std::string token;
-    std::vector<std::string> dataPoints;
-    while (std::getline(stream, token, ','))
-    {
-        dataPoints.push_back(token);
-    }
-    return dataPoints;
 }
 
 std::string ConstructUrl(const std::string& symbol,
@@ -79,7 +66,7 @@ std::string ConstructUrl(const std::string& symbol,
                          int toYear,
                          YahooCSVDataProvider::TradingPeriod tradingPeriod)
 {
-    const std::string url = "http://real-chart.finance.yahoo.com/table.csv?s=" +
+    return "http://real-chart.finance.yahoo.com/table.csv?s=" +
     symbol +
     "&a=" + std::to_string(static_cast<int>(fromMonth)) +
     "&b=" + std::to_string(fromDay) +
@@ -89,5 +76,4 @@ std::string ConstructUrl(const std::string& symbol,
     "&f=" + std::to_string(toYear) +
     "&g=" + static_cast<char>(tradingPeriod) +
     "&ignore=.csv";
-    return url;
 }

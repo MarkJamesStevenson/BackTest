@@ -5,12 +5,12 @@
 
 void DataProvider::UpdateBars(EventQueue& eventQueue)
 {
-    assert(!IsEmpty() && "Should not call without checking it has data");
+    assert(DataAvailable() && "Should not call without checking it has data");
     eventQueue.AddEvent(std::make_unique<MarketEvent>(bars.back()));
     bars.pop_back();
 }
 
-bool DataProvider::IsEmpty()
+bool DataProvider::DataAvailable() const
 {
-    return bars.empty();
+    return !bars.empty();
 }
