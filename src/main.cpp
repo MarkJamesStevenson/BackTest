@@ -1,7 +1,7 @@
 #include "BackTester/eventqueue.h"
 #include "BackTester/dataprovider.h"
 #include "BackTester/yahoocsvdataprovider.h"
-#include "BackTester/ievent.h"
+#include "BackTester/event.h"
 #include "BackTester/marketevent.h"
 #include <iostream>
 #include <cassert>
@@ -26,25 +26,9 @@ int main(int argc, char *argv[])
         dataProvider->UpdateBars(eventQueue);
         while (!eventQueue.IsEmpty())
         {
-            std::unique_ptr<IEvent> event = eventQueue.GetNextEvent();
+            std::unique_ptr<Event> event = eventQueue.GetNextEvent();
             if (event) {
-                switch (event->GetEventType()){
-                    case IEvent::Event_Type::MARKET_EVENT :
-                        std::cout << *static_cast<MarketEvent*>(event.get()) << std::endl;
-                        break;
-                    case IEvent::Event_Type::FILL_EVENT :
-                        std::cout << "fill event" << std::endl;
-                        break;
-                    case IEvent::Event_Type::ORDER_EVENT :
-                        std::cout << "order event" << std::endl;
-                        break;
-                    case IEvent::Event_Type::SIGNAL_EVENT :
-                        std::cout << "signal event" << std::endl;
-                        break;
-                    default :
-                        assert(false && "Do not recognise the event type");
-                        break;
-                }
+                event->DoAction();
             }
         }
         std::cout << "sleeping for 2 seconds" << std::endl;

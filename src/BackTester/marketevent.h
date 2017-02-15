@@ -1,7 +1,7 @@
 #ifndef MARKETEVENT_H
 #define MARKETEVENT_H
 
-#include "ievent.h"
+#include "event.h"
 #include "ohlcdatapoint.h"
 #include <iostream>
 
@@ -9,11 +9,12 @@
  * Creates the market event when new market data has
  * been received
  */
-class MarketEvent : public IEvent
+class MarketEvent : public Event
 {
 public:
-    MarketEvent(const OHLCDataPoint& data) :
-        IEvent(Event_Type::MARKET_EVENT), dataPoint(data) {}
+    MarketEvent(const OHLCDataPoint& data) : dataPoint(data) {}
+
+    void DoAction();
 
     friend std::ostream& operator<<(std::ostream& os, const MarketEvent& event);
 private:

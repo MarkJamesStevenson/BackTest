@@ -3,5 +3,4 @@
 
 TEST (SignalEvent, Create) {
     SignalEvent event("BLMB", SignalEvent::SignalType::LONG);
-    EXPECT_EQ(event.GetEventType(), SignalEvent::Event_Type::SIGNAL_EVENT);
 }

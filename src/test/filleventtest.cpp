@@ -6,6 +6,5 @@ TEST (FillEvent, Create) {
     {
         return 19.0;
     });
-    EXPECT_EQ(fill.GetEventType(), FillEvent::Event_Type::FILL_EVENT);
     EXPECT_EQ(fill.GetCommission(), 19.0);
 }

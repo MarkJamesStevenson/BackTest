@@ -1,23 +1,24 @@
 #ifndef ORDEREVENT_H
 #define ORDEREVENT_H
 
-#include "ievent.h"
+#include "event.h"
 #include <string>
 
 /*
  * Handles sending an order to a broker
  */
-class OrderEvent : public IEvent
+class OrderEvent : public Event
 {
 public: 
 
     OrderEvent(const std::string& ticker, OrderType type, double volume, Direction side) :
-        IEvent(Event_Type::ORDER_EVENT),
         symbol(ticker),
         orderType(type),
         quantity(volume),
         direction(side)
     {}
+
+    void DoAction() {}
 
     friend std::ostream& operator<<(std::ostream& os, const OrderEvent& event);
 
