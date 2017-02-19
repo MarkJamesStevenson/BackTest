@@ -15,6 +15,13 @@ public:
 
     StateMachine() = default;
 
+    enum class State {
+        IDLE,
+        STRATEGY_CALCULATION,
+        PORTFOLIO_CALCULATION,
+        ORDER_ENTRY,
+    };
+
     static void MarketEventAction(EventQueue& eventQueue)
     {
         std::cout << "the action when we move from idle to strategy\n\n";
@@ -29,6 +36,19 @@ public:
     void DoTransition(EventQueue& eventQueue, Event::EventType event);
 
 private:
+    struct Transition
+    {
+        Transition(State currentState, Event::EventType event, State nextState, std::function<void(EventQueue&)> actionFunction) :
+            currentState(currentState), event(event), nextState(nextState), actionFunction(actionFunction)
+        {}
+
+        State currentState;
+        Event::EventType event;
+        State nextState;
+        std::function<void(EventQueue&)> actionFunction;
+    };
+
+
     State currentState = State::IDLE;
 
     std::array<Transition, 6> stateTransitions = {{
