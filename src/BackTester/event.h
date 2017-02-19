@@ -10,7 +10,7 @@ public:
 
     virtual ~Event() = default;
 
-    EventType GetEventType () { return event; }
+    EventType GetEventType () const { return event; }
 
     enum class EventType {
         MARKET_EVENT,

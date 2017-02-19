@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
     try {
         dataProvider.Initialise("GOOGL");
     } catch (const std::exception& e) {
-        std::cout << "Unable to continue as could not initialise data provider\n"
+        std::cerr << "Unable to continue as could not initialise data provider\n"
                   << e.what() << "\n";
         exit(EXIT_FAILURE);
     }
@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
         {
             std::unique_ptr<Event> event = eventQueue.GetNextEvent();
             if (event) {
-                stateMachine.DoTransition(eventQueue, event->GetEventType());
+                stateMachine.DoTransition(eventQueue, event.get());
             }
         }
         std::cout << "sleeping for 0.2 seconds" << std::endl;
