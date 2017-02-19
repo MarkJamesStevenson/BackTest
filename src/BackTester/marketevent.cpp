@@ -12,8 +12,3 @@ std::ostream& operator<<(std::ostream& os, const MarketEvent& event)
        << " Adjusted Close "<< event.dataPoint.adjClose;
     return os;
 }
-
-void MarketEvent::DoAction()
-{
-    std::cout << *this << std::endl;
-}

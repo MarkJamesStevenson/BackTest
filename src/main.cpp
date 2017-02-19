@@ -7,6 +7,14 @@
 #include <memory>
 #include <chrono>
 #include <thread>
+#include "BackTester/statemachine.h"
+#include "BackTester/transition.h"
+
+int func()
+{
+    std::cout << "HI func" << std::endl;
+    return 1;
+}
 
 int main(int argc, char *argv[])
 {
@@ -19,6 +27,8 @@ int main(int argc, char *argv[])
                   << e.what() << "\n";
         exit(EXIT_FAILURE);
     }
+    //Transition<decltype(func)> t(func);
+    StateMachine stateMachine;
     while (dataProvider.DataAvailable())
     {
         dataProvider.UpdateBars(eventQueue);
@@ -26,11 +36,11 @@ int main(int argc, char *argv[])
         {
             std::unique_ptr<Event> event = eventQueue.GetNextEvent();
             if (event) {
-                event->DoAction();
+                stateMachine.DoTransition(eventQueue, event->GetEventType());
             }
         }
         std::cout << "sleeping for 0.2 seconds" << std::endl;
-        std::this_thread::sleep_for(std::chrono::milliseconds(20));
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     }
 }
 

@@ -12,9 +12,10 @@
 class MarketEvent : public Event
 {
 public:
-    MarketEvent(const OHLCDataPoint& data) : dataPoint(data) {}
-
-    void DoAction();
+    MarketEvent(const OHLCDataPoint& data) :
+        Event(Event::EventType::MARKET_EVENT),
+        dataPoint(data)
+    {}
 
     friend std::ostream& operator<<(std::ostream& os, const MarketEvent& event);
 private:

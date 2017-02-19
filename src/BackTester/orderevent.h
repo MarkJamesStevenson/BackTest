@@ -12,13 +12,12 @@ class OrderEvent : public Event
 public: 
 
     OrderEvent(const std::string& ticker, OrderType type, double volume, Direction side) :
+        Event(Event::EventType::ORDER_EVENT),
         symbol(ticker),
         orderType(type),
         quantity(volume),
         direction(side)
     {}
-
-    void DoAction() {}
 
     friend std::ostream& operator<<(std::ostream& os, const OrderEvent& event);
 

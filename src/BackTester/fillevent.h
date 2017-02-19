@@ -18,6 +18,7 @@ public:
               Direction side,
               double cost,
               Callable commissionCalculation) :
+        Event(Event::EventType::FILL_EVENT),
         symbol(ticker),
         exchange(exch),
         volumeFilled(volume),
@@ -26,8 +27,6 @@ public:
     {
         commission = commissionCalculation();
     }
-
-    void DoAction() {}
 
     double GetCommission() const
     {

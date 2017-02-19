@@ -4,12 +4,21 @@
 class Event
 {
 public:
+    enum class EventType;
 
-    Event() = default;
+    Event(EventType event) : event(event) {}
 
     virtual ~Event() = default;
 
-    virtual void DoAction() = 0;
+    EventType GetEventType () { return event; }
+
+    enum class EventType {
+        MARKET_EVENT,
+        SIGNAL_EVENT,
+        ORDER_EVENT,
+        FILL_EVENT,
+        INTERNAL_EVENT
+    };
 
     enum class Direction {
         BUY,
@@ -25,6 +34,9 @@ public:
         LONG,
         SHORT
     };
+
+private:
+    EventType event;
 };
 
 #endif // EVENT_H

@@ -13,12 +13,11 @@ class SignalEvent : public Event
 public:
 
     SignalEvent(const std::string& ticker, SignalType signalType) :
+        Event(Event::EventType::SIGNAL_EVENT),
         symbol(ticker),
         signal(signalType),
         dateTime(std::chrono::system_clock::now())
     {}
-
-    void DoAction() {}
 
 private:
     std::string symbol;
