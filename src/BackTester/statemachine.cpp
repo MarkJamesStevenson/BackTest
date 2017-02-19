@@ -1,6 +1,7 @@
 #include "statemachine.h"
 #include <algorithm>
 #include <iostream>
+#include "returntoidleevent.h"
 
 void StateMachine::DoTransition(EventQueue &eventQueue, Event::EventType event)
 {
@@ -12,6 +13,17 @@ void StateMachine::DoTransition(EventQueue &eventQueue, Event::EventType event)
         it->actionFunction(eventQueue);
         currentState = it->nextState;
     } else {
-        std::cout << "could not complete transition, remaining in current state" << std::endl;
+        std::cerr << "could not complete transition, remaining in current state" << std::endl;
     }
+}
+
+void MarketEventAction(EventQueue &eventQueue)
+{
+    std::cout << "the action when we move from idle to strategy\n\n";
+    eventQueue.AddEvent(std::make_unique<ReturnToIdleEvent>());
+}
+
+void InternalEventAction(EventQueue &)
+{
+    std::cout << "internal event\n\n";
 }

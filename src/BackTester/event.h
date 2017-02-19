@@ -17,7 +17,7 @@ public:
         SIGNAL_EVENT,
         ORDER_EVENT,
         FILL_EVENT,
-        INTERNAL_EVENT
+        RETURN_TO_IDLE
     };
 
     enum class Direction {

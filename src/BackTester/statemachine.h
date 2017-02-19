@@ -3,11 +3,11 @@
 
 #include <array>
 #include "event.h"
-#include <iostream>
-#include "enums.h"
-#include "transition.h"
 #include "eventqueue.h"
-#include "internalevent.h"
+#include <functional>
+
+void MarketEventAction(EventQueue& eventQueue);
+void InternalEventAction(EventQueue&);
 
 class StateMachine
 {
@@ -22,16 +22,8 @@ public:
         ORDER_ENTRY,
     };
 
-    static void MarketEventAction(EventQueue& eventQueue)
-    {
-        std::cout << "the action when we move from idle to strategy\n\n";
-        eventQueue.AddEvent(std::make_unique<InternalEvent>());
-    }
-
-    static void InternalEventAction(EventQueue&)
-    {
-        std::cout << "internal event\n\n";
-    }
+    StateMachine(const StateMachine&) = delete;
+    StateMachine& operator=(const StateMachine&) = delete;
 
     void DoTransition(EventQueue& eventQueue, Event::EventType event);
 
@@ -48,17 +40,19 @@ private:
         std::function<void(EventQueue&)> actionFunction;
     };
 
-
+    // We always start at the idle state
     State currentState = State::IDLE;
 
+    // This array contains all the possible state transitions. The action is a function pointer which implements the
+    // functionality for the new state.
     std::array<Transition, 6> stateTransitions = {{
-        //CURRENT STATE                    EVENT                              NEXT STATE                       ACTION
-        { State::IDLE,                  Event::EventType::MARKET_EVENT,    State::STRATEGY_CALCULATION,  &StateMachine::MarketEventAction },
-        { State::STRATEGY_CALCULATION,  Event::EventType::SIGNAL_EVENT,    State::PORTFOLIO_CALCULATION, &StateMachine::MarketEventAction },
-        { State::STRATEGY_CALCULATION,  Event::EventType::INTERNAL_EVENT,  State::IDLE,                  &StateMachine::InternalEventAction },
-        { State::PORTFOLIO_CALCULATION, Event::EventType::ORDER_EVENT,     State::STRATEGY_CALCULATION,  &StateMachine::MarketEventAction },
-        { State::ORDER_ENTRY,           Event::EventType::FILL_EVENT,      State::PORTFOLIO_CALCULATION, &StateMachine::MarketEventAction },
-        { State::PORTFOLIO_CALCULATION, Event::EventType::INTERNAL_EVENT,  State::IDLE,                  &StateMachine::MarketEventAction }
+        //CURRENT STATE                 EVENT                              NEXT STATE                    ACTION
+        { State::IDLE,                  Event::EventType::MARKET_EVENT,    State::STRATEGY_CALCULATION,  &MarketEventAction },
+        { State::STRATEGY_CALCULATION,  Event::EventType::SIGNAL_EVENT,    State::PORTFOLIO_CALCULATION, &MarketEventAction },
+        { State::STRATEGY_CALCULATION,  Event::EventType::RETURN_TO_IDLE,  State::IDLE,                  &MarketEventAction },
+        { State::PORTFOLIO_CALCULATION, Event::EventType::ORDER_EVENT,     State::STRATEGY_CALCULATION,  &MarketEventAction },
+        { State::ORDER_ENTRY,           Event::EventType::FILL_EVENT,      State::PORTFOLIO_CALCULATION, &MarketEventAction },
+        { State::PORTFOLIO_CALCULATION, Event::EventType::RETURN_TO_IDLE,  State::IDLE,                  &MarketEventAction }
     }};
 };
 
