@@ -46,17 +46,7 @@ private:
     // We always start at the idle state
     State currentState = State::IDLE;
 
-    // This array contains all the possible state transitions. The action is a function pointer which implements the
-    // functionality for the new state.
-    std::array<Transition, 6> stateTransitions = {{
-        //CURRENT STATE                 EVENT                              NEXT STATE                    ACTION
-        { State::IDLE,                  Event::EventType::MARKET_EVENT,    State::STRATEGY_CALCULATION,  &UpdateStrategyBars },
-        { State::STRATEGY_CALCULATION,  Event::EventType::SIGNAL_EVENT,    State::PORTFOLIO_CALCULATION, &UpdatePortfolioBars },
-        { State::STRATEGY_CALCULATION,  Event::EventType::RETURN_TO_IDLE,  State::IDLE,                  &ReturnToIdleState },
-        { State::PORTFOLIO_CALCULATION, Event::EventType::ORDER_EVENT,     State::ORDER_ENTRY,           &SendOrderToBroker },
-        { State::ORDER_ENTRY,           Event::EventType::FILL_EVENT,      State::PORTFOLIO_CALCULATION, &UpdatePortfolioFill },
-        { State::PORTFOLIO_CALCULATION, Event::EventType::RETURN_TO_IDLE,  State::IDLE,                  &ReturnToIdleState }
-    }};
+    static const std::array<Transition, 6> stateTransitions;
 };
 
 #endif // STATEMACHINE_H
