@@ -20,9 +20,9 @@ const std::array<StateMachine::Transition, 6> StateMachine::stateTransitions = {
 void StateMachine::DoTransition(EventQueue &eventQueue, Event *event)
 {
     if (event) {
-        auto it = std::find_if(std::begin(stateTransitions), std::end(stateTransitions), [this, event] (const auto& transition) {
+        auto it = std::find_if(std::cbegin(stateTransitions), std::cend(stateTransitions), [this, event] (const auto& transition) {
             return transition.currentState == currentState &&
-                    transition.event == event->GetEventType();
+                   transition.event == event->GetEventType();
         });
         if (it != std::end(stateTransitions)) {
             it->actionFunction(eventQueue, event);
@@ -49,7 +49,7 @@ void UpdateStrategyBars(EventQueue &eventQueue, Event* event)
 
 void ReturnToIdleState(EventQueue &eventQueue, Event* event)
 {
-    std::cout << "internal event\n\n";
+    std::cout << "Returning to state IDLE" << std::endl;
 }
 
 void UpdatePortfolioBars(EventQueue &eventQueue, Event *event)

@@ -30,6 +30,8 @@ public:
 
     void DoTransition(EventQueue& eventQueue, Event* event);
 
+    State GetCurrentState() const { return currentState; }
+
 private:
     struct Transition
     {
