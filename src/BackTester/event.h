@@ -8,7 +8,8 @@ public:
 
     Event(EventType event) : event(event) {}
 
-    virtual ~Event() = default;
+    // Trick to make sure event is an ABC. We still define it in the .cpp file.
+    virtual ~Event() = 0;
 
     EventType GetEventType () const { return event; }
 

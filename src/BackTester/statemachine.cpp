@@ -17,52 +17,52 @@ const std::array<StateMachine::Transition, 6> StateMachine::stateTransitions = {
     { StateMachine::State::PORTFOLIO_CALCULATION, Event::EventType::RETURN_TO_IDLE,  StateMachine::State::IDLE,                  &ReturnToIdleState }
 }};
 
-void StateMachine::DoTransition(EventQueue &eventQueue, Event *event)
+void StateMachine::DoTransition(EventQueue &eventQueue, Event *event, Strategy* strategy)
 {
-    if (event) {
+    if (event && strategy) {
         auto it = std::find_if(std::cbegin(stateTransitions), std::cend(stateTransitions), [this, event] (const auto& transition) {
             return transition.currentState == currentState &&
                    transition.event == event->GetEventType();
         });
-        if (it != std::end(stateTransitions)) {
-            it->actionFunction(eventQueue, event);
+        if (it != std::cend(stateTransitions)) {
+            it->actionFunction(eventQueue, event, strategy);
             currentState = it->nextState;
         } else {
             assert(false && "Make sure you have added the transition to the stateTransitions table");
-            std::cerr << "could not complete transition, remaining in current state" << std::endl;
+            std::cerr << "Could not complete transition, remaining in current state" << std::endl;
         }
     }
 }
 
-void UpdateStrategyBars(EventQueue &eventQueue, Event* event)
+void UpdateStrategyBars(EventQueue &eventQueue, Event* event, Strategy *strategy)
 {
     //At this stage the event should always be a market event
     MarketEvent* marketEvent = dynamic_cast<MarketEvent*>(event);
     if (marketEvent) {
-        std::cout << "strategy has decided to return to idle \n\n";
-        // send the market event data to the strategy class to calculate
-        eventQueue.AddEvent(std::make_unique<ReturnToIdleEvent>());
+        strategy->ProcessDataUpdate(eventQueue, marketEvent->GetOHLCDataPoint());
     } else {
         assert(false && "should only be market events here");
     }
 }
 
-void ReturnToIdleState(EventQueue &eventQueue, Event* event)
+void ReturnToIdleState(EventQueue &eventQueue, Event* event, Strategy *strategy)
 {
     std::cout << "Returning to state IDLE" << std::endl;
 }
 
-void UpdatePortfolioBars(EventQueue &eventQueue, Event *event)
+void UpdatePortfolioBars(EventQueue &eventQueue, Event *event, Strategy *strategy)
+{
+    std::cout << "updating porfolio bars \n\n";
+    std::cout << "decided to return to idle" << std::endl;
+    eventQueue.AddEvent(std::make_unique<ReturnToIdleEvent>());
+}
+
+void SendOrderToBroker(EventQueue &eventQueue, Event* event, Strategy *strategy)
 {
 
 }
 
-void SendOrderToBroker(EventQueue &eventQueue, Event* event)
-{
-
-}
-
-void UpdatePortfolioFill(EventQueue &eventQueue, Event *event)
+void UpdatePortfolioFill(EventQueue &eventQueue, Event *event, Strategy *strategy)
 {
 
 }

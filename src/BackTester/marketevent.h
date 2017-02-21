@@ -17,6 +17,8 @@ public:
         dataPoint(data)
     {}
 
+    OHLCDataPoint GetOHLCDataPoint() { return dataPoint; }
+
     friend std::ostream& operator<<(std::ostream& os, const MarketEvent& event);
 private:
     OHLCDataPoint dataPoint;

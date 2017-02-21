@@ -5,6 +5,9 @@
 #include "../BackTester/marketevent.h"
 #include "../BackTester/ohlcdatapoint.h"
 #include "../BackTester/signalevent.h"
+#include "../BackTester/strategy.h"
+#include "../BackTester/buyandholdstrategy.h"
+#include <memory>
 
 class StateMachineTest : public ::testing::Test {
 public:
@@ -12,6 +15,7 @@ public:
     StateMachine machine;
     EventQueue eventQueue;
     OHLCDataPoint datapoint;
+    std::unique_ptr<Strategy> strategy = std::make_unique<BuyAndHoldStrategy>();
 
     StateMachineTest() : datapoint("test", 10, 20, 30, 30, 20, 10) {}
 
@@ -27,7 +31,7 @@ public:
 TEST_F (StateMachineTest, IDLE_to_STRATEGYCALCULATION_Transition) {
     EXPECT_EQ(machine.GetCurrentState(), StateMachine::State::IDLE);
     std::unique_ptr<Event> event(std::make_unique<MarketEvent>(datapoint));
-    machine.DoTransition(eventQueue, event.get());
+    machine.DoTransition(eventQueue, event.get(), strategy.get());
     EXPECT_EQ(machine.GetCurrentState(), StateMachine::State::STRATEGY_CALCULATION);
 }
 
@@ -35,5 +39,5 @@ TEST_F (StateMachineTest, IDLE_to_STRATEGYCALCULATION_Transition) {
 TEST_F (StateMachineTest, IDLE_to_SIGNALEVENT_Transition) {
     EXPECT_EQ(machine.GetCurrentState(), StateMachine::State::IDLE);
     std::unique_ptr<Event> event(std::make_unique<SignalEvent>("BLMB", SignalEvent::SignalType::LONG));
-    EXPECT_DEATH(machine.DoTransition(eventQueue, event.get()), "Make sure you have added the transition to the stateTransitions table");
+    EXPECT_DEATH(machine.DoTransition(eventQueue, event.get(), strategy.get()), "Make sure you have added the transition to the stateTransitions table");
 }

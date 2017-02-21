@@ -5,12 +5,7 @@
 #include "event.h"
 #include "eventqueue.h"
 #include <functional>
-
-void UpdateStrategyBars(EventQueue& eventQueue, Event* event);
-void ReturnToIdleState(EventQueue& eventQueue, Event *event);
-void UpdatePortfolioBars(EventQueue& eventQueue, Event* event);
-void SendOrderToBroker(EventQueue& eventQueue, Event *event);
-void UpdatePortfolioFill(EventQueue& eventQueue, Event* event);
+#include "strategy.h"
 
 class StateMachine
 {
@@ -28,21 +23,21 @@ public:
     StateMachine(const StateMachine&) = delete;
     StateMachine& operator=(const StateMachine&) = delete;
 
-    void DoTransition(EventQueue& eventQueue, Event* event);
+    void DoTransition(EventQueue& eventQueue, Event* event, Strategy *strategy);
 
     State GetCurrentState() const { return currentState; }
 
 private:
     struct Transition
     {
-        Transition(State currentState, Event::EventType event, State nextState, std::function<void(EventQueue&, Event*)> actionFunction) :
+        Transition(State currentState, Event::EventType event, State nextState, std::function<void(EventQueue&, Event*, Strategy*)> actionFunction) :
             currentState(currentState), event(event), nextState(nextState), actionFunction(actionFunction)
         {}
 
         State currentState;
         Event::EventType event;
         State nextState;
-        std::function<void(EventQueue&, Event*)> actionFunction;
+        std::function<void(EventQueue&, Event*, Strategy*)> actionFunction;
     };
 
     // We always start at the idle state
@@ -50,5 +45,11 @@ private:
 
     static const std::array<Transition, 6> stateTransitions;
 };
+
+void UpdateStrategyBars(EventQueue& eventQueue, Event* event, Strategy* strategy);
+void ReturnToIdleState(EventQueue& eventQueue, Event *event, Strategy* strategy);
+void UpdatePortfolioBars(EventQueue& eventQueue, Event* event, Strategy* strategy);
+void SendOrderToBroker(EventQueue& eventQueue, Event *event, Strategy* strategy);
+void UpdatePortfolioFill(EventQueue& eventQueue, Event* event, Strategy* strategy);
 
 #endif // STATEMACHINE_H
