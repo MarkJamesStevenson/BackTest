@@ -2,7 +2,7 @@
 #define STRATEGY_H
 
 #include "eventqueue.h"
-#include "ohlcdatapoint.h"
+#include "marketevent.h"
 
 class Strategy
 {
@@ -13,7 +13,7 @@ public:
 
     // This function should add either a RETURN_TO_IDLE event or
     // SIGNAL_EVENT to the eventQueue
-    virtual void ProcessDataUpdate(EventQueue& eventQueue, const OHLCDataPoint& dataPoint) = 0;
+    virtual void ProcessDataUpdate(EventQueue& eventQueue, MarketEvent* marketEvent) = 0;
 };
 
 #endif // STRATEGY_H

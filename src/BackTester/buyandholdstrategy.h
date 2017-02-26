@@ -2,13 +2,14 @@
 #define BUYANDHOLDSTRATEGY_H
 
 #include "strategy.h"
+class MarketEvent;
 
 class BuyAndHoldStrategy : public Strategy
 {
 public:
     BuyAndHoldStrategy() = default;
 
-    void ProcessDataUpdate(EventQueue& eventQueue, const OHLCDataPoint &dataPoint) override;
+    void ProcessDataUpdate(EventQueue& eventQueue, MarketEvent* marketEvent) override;
 
 private:
     bool bought = false;

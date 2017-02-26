@@ -35,7 +35,7 @@ TEST (EventQueue, AddMultipleEvents) {
         return 19.0;
     });
     auto event3 = std::make_unique<OrderEvent>("BLMB", Event::OrderType::LIM, 10, Event::Direction::SELL);
-    auto event4 = std::make_unique<SignalEvent>("BLMB", Event::SignalType::LONG);
+    auto event4 = std::make_unique<SignalEvent>("BLMB", Event::SignalType::LONG, 10.0);
     EventQueue eventQueue;
     eventQueue.AddEvent(std::move(event1));
     eventQueue.AddEvent(std::move(event2));

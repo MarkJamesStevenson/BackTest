@@ -33,7 +33,8 @@ public:
 
     enum class SignalType {
         LONG,
-        SHORT
+        SHORT,
+        EXIT
     };
 
 private:
