@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 #include "ohlcdatapoint.h"
-#include "eventqueue.h"
+class EventQueue;
 
 class DataProvider
 {

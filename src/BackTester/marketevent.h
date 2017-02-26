@@ -3,7 +3,7 @@
 
 #include "event.h"
 #include "ohlcdatapoint.h"
-#include <iostream>
+#include <iosfwd>
 
 /*
  * Creates the market event when new market data has

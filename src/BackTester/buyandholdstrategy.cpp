@@ -1,7 +1,9 @@
 #include "buyandholdstrategy.h"
 #include "returntoidleevent.h"
 #include "signalevent.h"
+#include "marketevent.h"
 #include <iostream>
+#include "eventqueue.h"
 
 void BuyAndHoldStrategy::ProcessDataUpdate(EventQueue &eventQueue, MarketEvent *marketEvent)
 {

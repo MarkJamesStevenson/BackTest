@@ -1,8 +1,8 @@
 #ifndef STRATEGY_H
 #define STRATEGY_H
 
-#include "eventqueue.h"
-#include "marketevent.h"
+class EventQueue;
+class MarketEvent;
 
 class Strategy
 {

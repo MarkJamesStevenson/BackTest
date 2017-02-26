@@ -1,9 +1,14 @@
 #include "portfoliohandler.h"
 #include "signalevent.h"
+#include "marketevent.h"
 #include "returntoidleevent.h"
-#include <memory>
 #include "orderevent.h"
+#include "fillevent.h"
+#include "eventqueue.h"
+
+#include <memory>
 #include <iostream>
+
 
 void PortfolioHandler::SignalUpdate(EventQueue &eventQueue, SignalEvent *signalEvent)
 {

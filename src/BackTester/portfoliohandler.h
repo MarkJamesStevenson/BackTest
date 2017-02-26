@@ -1,10 +1,10 @@
 #ifndef PORTFOLIOHANDLER_H
 #define PORTFOLIOHANDLER_H
 
-#include "signalevent.h"
-#include "marketevent.h"
-#include "fillevent.h"
-#include "eventqueue.h"
+class SignalEvent;
+class MarketEvent;
+class FillEvent;
+class EventQueue;
 
 class PortfolioHandler
 {

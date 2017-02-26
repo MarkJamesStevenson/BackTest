@@ -3,10 +3,11 @@
 
 #include <array>
 #include "event.h"
-#include "eventqueue.h"
 #include <functional>
-#include "strategy.h"
-#include "portfoliohandler.h"
+
+class PortfolioHandler;
+class EventQueue;
+class Strategy;
 
 class StateMachine
 {

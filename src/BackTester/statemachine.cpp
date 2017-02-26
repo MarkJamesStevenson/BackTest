@@ -4,6 +4,10 @@
 #include "returntoidleevent.h"
 #include <cassert>
 #include "marketevent.h"
+#include "signalevent.h"
+#include "fillevent.h"
+#include "strategy.h"
+#include "portfoliohandler.h"
 
 // This array contains all the possible state transitions. The action is a function pointer which implements the
 // functionality for the new state.

@@ -4,7 +4,6 @@
 #include "dataprovider.h"
 #include <string>
 #include <vector>
-#include "curl/curl.h"
 
 class YahooCSVDataProvider : public DataProvider
 {

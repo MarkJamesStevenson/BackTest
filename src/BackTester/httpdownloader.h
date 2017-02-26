@@ -4,7 +4,6 @@
 #include "curl/curl.h"
 #include <string>
 
-
 class HTTPDownloader
 {
 public:
