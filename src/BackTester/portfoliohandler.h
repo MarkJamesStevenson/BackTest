@@ -10,8 +10,8 @@ class PortfolioHandler
 {
 public:
     // Set up the portfolio with an initial capital and the volume of shares to
-    // buy on each transaction
-    PortfolioHandler(double initialCapital = 10000, int volumePerTransaction = 10) :
+    // buy on each transaction, the initial capital is in GBX
+    PortfolioHandler(double initialCapital = 1000000, int volumePerTransaction = 10) :
         capital(initialCapital),
         volumePerTransaction(volumePerTransaction),
         volumeInvested(0),

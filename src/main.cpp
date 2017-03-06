@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
     EventQueue eventQueue;
     YahooCSVDataProvider dataProvider;
     try {
-        dataProvider.Initialise("GOOGL");
+        dataProvider.Initialise("FDSA.L");
     } catch (const std::exception& e) {
         std::cerr << "Unable to continue as could not initialise data provider\n"
                   << e.what() << "\n";
