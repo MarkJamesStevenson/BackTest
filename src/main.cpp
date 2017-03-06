@@ -11,6 +11,8 @@
 #include "BackTester/strategy.h"
 #include "BackTester/buyandholdstrategy.h"
 #include "BackTester/portfoliohandler.h"
+#include "BackTester/broker.h"
+#include "BackTester/interactivebrokers.h"
 
 int main(int argc, char *argv[])
 {
@@ -25,6 +27,7 @@ int main(int argc, char *argv[])
     }
     StateMachine stateMachine;
     std::unique_ptr<Strategy> strategy(std::make_unique<BuyAndHoldStrategy>());
+    std::unique_ptr<Broker> broker(std::make_unique<InteractiveBrokers>());
     PortfolioHandler portfolio;
     while (dataProvider.DataAvailable())
     {
@@ -33,11 +36,11 @@ int main(int argc, char *argv[])
         {
             std::unique_ptr<Event> event = eventQueue.GetNextEvent();
             if (event) {
-                stateMachine.DoTransition(eventQueue, event.get(), strategy.get(), portfolio);
+                stateMachine.DoTransition(eventQueue, event.get(), strategy.get(), portfolio, broker.get());
             }
         }
         std::cout << "sleeping for 0.2 seconds" << std::endl;
-        std::this_thread::sleep_for(std::chrono::milliseconds(5000));
+        std::this_thread::sleep_for(std::chrono::milliseconds(50));
     }
 }
 

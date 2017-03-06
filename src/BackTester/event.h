@@ -11,7 +11,7 @@ public:
     // Trick to make sure event is an ABC. We still define it in the .cpp file.
     virtual ~Event() = 0;
 
-    EventType GetEventType () const { return event; }
+    EventType GetEventType() const { return event; }
 
     enum class EventType {
         MARKET_EVENT,

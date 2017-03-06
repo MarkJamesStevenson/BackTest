@@ -10,7 +10,7 @@ std::ostream& operator<<(std::ostream& os, const OrderEvent& event)
     os << "Order:"
        << " Symbol="     << event.symbol
        << " Order type=" << type
-       << " Quantity="   << event.quantity
+       << " Volume="   << event.volume
        << " Direction="  << direction;
     return os;
 }

@@ -17,7 +17,9 @@ public:
         dataPoint(data)
     {}
 
-    double GetClosePrice() { return dataPoint.close; }
+    double GetClosePrice() const { return dataPoint.close; }
+
+    std::string GetDate() const { return dataPoint.date; }
 
     friend std::ostream& operator<<(std::ostream& os, const MarketEvent& event);
 private:

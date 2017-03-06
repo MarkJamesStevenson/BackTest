@@ -11,10 +11,11 @@ class PortfolioHandler
 public:
     // Set up the portfolio with an initial capital and the volume of shares to
     // buy on each transaction
-    PortfolioHandler(double initialCapital = 1000, int volumePerTransaction = 10) :
+    PortfolioHandler(double initialCapital = 10000, int volumePerTransaction = 10) :
         capital(initialCapital),
         volumePerTransaction(volumePerTransaction),
-        volumeInvested(0)
+        volumeInvested(0),
+        capitalInvested(0.0)
     {}
 
     void SignalUpdate(EventQueue& eventQueue, SignalEvent *signalEvent);
@@ -28,6 +29,7 @@ private:
     double capital;
     int volumePerTransaction;
     int volumeInvested;
+    double capitalInvested;
 };
 
 #endif // PORTFOLIOHANDLER_H

@@ -5,27 +5,24 @@
 /*
  * Event for when an order is filled, stores
  * the quantity filled and at what price.
- * TODO : decide the best way to handle commission charges
- * may be best to have a IBroker class.
  */
 class FillEvent : public Event
 {
 public:
-    template <typename Callable>
-    FillEvent(const std::string& ticker,
+    FillEvent(const std::string& symbol,
               const std::string& exch,
-              double volume,
+              int volume,
               Direction side,
               double cost,
-              Callable commissionCalculation) :
+              double commission) :
         Event(Event::EventType::FILL_EVENT),
-        symbol(ticker),
+        symbol(symbol),
         exchange(exch),
         volumeFilled(volume),
         direction(side),
-        fillCost(cost)
+        fillCost(cost),
+        commission(commission)
     {
-        commission = commissionCalculation();
     }
 
     double GetCommission() const
@@ -33,10 +30,30 @@ public:
         return commission;
     }
 
+    Direction GetDirection() const
+    {
+        return direction;
+    }
+
+    std::string GetSymbol() const
+    {
+        return symbol;
+    }
+
+    int GetVolumeFilled() const
+    {
+        return volumeFilled;
+    }
+
+    double GetFillCost() const
+    {
+        return fillCost;
+    }
+
 private:
     std::string symbol;
     std::string exchange;
-    double volumeFilled;
+    int volumeFilled;
     Direction direction;
     double fillCost;
     double commission;

@@ -6,8 +6,10 @@
 #include "marketevent.h"
 #include "signalevent.h"
 #include "fillevent.h"
+#include "orderevent.h"
 #include "strategy.h"
 #include "portfoliohandler.h"
+#include "broker.h"
 
 // This array contains all the possible state transitions. The action is a function pointer which implements the
 // functionality for the new state.
@@ -21,7 +23,7 @@ const std::array<StateMachine::Transition, 6> StateMachine::stateTransitions = {
     { StateMachine::State::PORTFOLIO_CALCULATION, Event::EventType::RETURN_TO_IDLE,  StateMachine::State::IDLE,                  &ReturnToIdleState }
 }};
 
-void StateMachine::DoTransition(EventQueue &eventQueue, Event *event, Strategy* strategy, PortfolioHandler& portfolio)
+void StateMachine::DoTransition(EventQueue &eventQueue, Event *event, Strategy* strategy, PortfolioHandler& portfolio, Broker *broker)
 {
     if (event && strategy) {
         auto it = std::find_if(std::cbegin(stateTransitions), std::cend(stateTransitions), [this, event] (const auto& transition) {
@@ -29,7 +31,7 @@ void StateMachine::DoTransition(EventQueue &eventQueue, Event *event, Strategy* 
                    transition.event == event->GetEventType();
         });
         if (it != std::cend(stateTransitions)) {
-            it->actionFunction(eventQueue, event, strategy, portfolio);
+            it->actionFunction(eventQueue, event, strategy, portfolio, broker);
             currentState = it->nextState;
         } else {
             assert(false && "Make sure you have added the transition to the stateTransitions table");
@@ -38,7 +40,7 @@ void StateMachine::DoTransition(EventQueue &eventQueue, Event *event, Strategy* 
     }
 }
 
-void UpdateStrategyBars(EventQueue &eventQueue, Event* event, Strategy *strategy, PortfolioHandler &portfolio)
+void UpdateStrategyBars(EventQueue &eventQueue, Event* event, Strategy *strategy, PortfolioHandler &portfolio, Broker* broker)
 {
     //At this stage the event should always be a market event
     MarketEvent* marketEvent = dynamic_cast<MarketEvent*>(event);
@@ -50,12 +52,12 @@ void UpdateStrategyBars(EventQueue &eventQueue, Event* event, Strategy *strategy
     }
 }
 
-void ReturnToIdleState(EventQueue &eventQueue, Event* event, Strategy *strategy, PortfolioHandler &portfolio)
+void ReturnToIdleState(EventQueue &eventQueue, Event* event, Strategy *strategy, PortfolioHandler &portfolio, Broker *broker)
 {
     std::cout << "Returning to state IDLE" << std::endl;
 }
 
-void UpdatePortfolioSignal(EventQueue &eventQueue, Event *event, Strategy *strategy, PortfolioHandler &portfolio)
+void UpdatePortfolioSignal(EventQueue &eventQueue, Event *event, Strategy *strategy, PortfolioHandler &portfolio, Broker* broker)
 {
     std::cout << "updating porfolio with new signal\n";
     // This will always be a signal event
@@ -67,12 +69,19 @@ void UpdatePortfolioSignal(EventQueue &eventQueue, Event *event, Strategy *strat
     }
 }
 
-void SendOrderToBroker(EventQueue &eventQueue, Event* event, Strategy *strategy, PortfolioHandler &portfolio)
+void SendOrderToBroker(EventQueue &eventQueue, Event* event, Strategy *strategy, PortfolioHandler &portfolio, Broker* broker)
 {
-
+    std::cout << "Sending order to broker\n";
+    // This will always be an order event
+    OrderEvent* orderEvent = dynamic_cast<OrderEvent*>(event);
+    if (orderEvent) {
+        broker->ExecuteOrder(eventQueue, orderEvent);
+    } else {
+        assert(false && "should only be order events here");
+    }
 }
 
-void UpdatePortfolioFill(EventQueue &eventQueue, Event *event, Strategy *strategy, PortfolioHandler &portfolio)
+void UpdatePortfolioFill(EventQueue &eventQueue, Event *event, Strategy *strategy, PortfolioHandler &portfolio, Broker *broker)
 {
     std::cout << "updating porfolio with new fill\n";
     // This will always be a fill event
@@ -80,7 +89,6 @@ void UpdatePortfolioFill(EventQueue &eventQueue, Event *event, Strategy *strateg
     if (fillEvent) {
         portfolio.FillUpdate(eventQueue, fillEvent);
     } else {
-        assert(false && "should only be signal events here");
+        assert(false && "should only be fill events here");
     }
-;
 }

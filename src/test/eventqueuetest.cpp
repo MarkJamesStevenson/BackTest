@@ -30,11 +30,8 @@ TEST (EventQueue, AddEvent) {
 TEST (EventQueue, AddMultipleEvents) {
     OHLCDataPoint data("date",10, 5, 15, 20, 50, 10);
     auto event1 = std::make_unique<MarketEvent>(data);
-    auto event2 = std::make_unique<FillEvent>("BLMB", "LSE", 10, Event::Direction::BUY, 30.4, [] ()
-    {
-        return 19.0;
-    });
-    auto event3 = std::make_unique<OrderEvent>("BLMB", Event::OrderType::LIM, 10, Event::Direction::SELL);
+    auto event2 = std::make_unique<FillEvent>("BLMB", "LSE", 10, Event::Direction::BUY, 30.4, 19);
+    auto event3 = std::make_unique<OrderEvent>("BLMB", Event::OrderType::LIM, 10, 19.3, Event::Direction::SELL);
     auto event4 = std::make_unique<SignalEvent>("BLMB", Event::SignalType::LONG, 10.0);
     EventQueue eventQueue;
     eventQueue.AddEvent(std::move(event1));
