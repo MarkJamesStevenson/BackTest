@@ -1,4 +1,5 @@
 #include "marketevent.h"
+#include <iostream>
 
 std::ostream& operator<<(std::ostream& os, const MarketEvent& event)
 {
