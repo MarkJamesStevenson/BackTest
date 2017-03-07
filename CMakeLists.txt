@@ -44,3 +44,5 @@ target_link_libraries(${PROJECT_NAME} BackTester ${curl_library})
 
 add_executable(test_runner ${sources_test})
 target_link_libraries(test_runner gtest_main BackTester ${curl_library})
+
+enable_testing()
