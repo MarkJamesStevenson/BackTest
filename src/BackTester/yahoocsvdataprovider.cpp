@@ -1,7 +1,6 @@
 #include "yahoocsvdataprovider.h"
 #include "httpdownloader.h"
 #include <iostream>
-#include "curl/curl.h"
 #include <string>
 #include <cstdlib>
 #include <sstream>

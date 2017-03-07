@@ -8,7 +8,7 @@
 void InteractiveBrokers::ExecuteOrder(EventQueue& eventQueue, OrderEvent *event)
 {
     double totalCommision = CalculateCommission(event) + CalculateExchangeFees(event);
-    std::cout << "commission is " << totalCommision << std::endl;
+    std::cout << "Commission is " << totalCommision << std::endl;
     eventQueue.AddEvent(std::make_unique<FillEvent>(event->GetSymbol(),
                                                     "LSE",
                                                     event->GetVolume(),

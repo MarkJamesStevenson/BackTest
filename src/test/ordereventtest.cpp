@@ -13,7 +13,7 @@ TEST (OrderEventTest, OutputStream) {
     OrderEvent ev("BLMB", Event::OrderType::LIM, 10, 19.0, Event::Direction::BUY);
     std::ostringstream os;
     os << ev;
-    EXPECT_EQ(os.str(), "Order: Symbol=BLMB Order type=LIM Quantity=10 Direction=BUY");
+    EXPECT_EQ(os.str(), "Order: Symbol=BLMB Order type=LIM Volume=10 Direction=BUY");
 }
 
 

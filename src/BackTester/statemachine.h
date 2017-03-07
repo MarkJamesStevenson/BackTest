@@ -13,7 +13,6 @@ class Broker;
 class StateMachine
 {
 public:
-
     StateMachine() = default;
 
     enum class State {
