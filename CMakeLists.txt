@@ -1,5 +1,6 @@
 project(BackTest)
 cmake_minimum_required(VERSION 2.8)
+set (CMAKE_CXX_STANDARD 14)
 
 # Download and unpack googletest at configure time
 configure_file(CMakeLists.txt.in.txt
