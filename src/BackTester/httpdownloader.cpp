@@ -26,7 +26,7 @@ std::string HTTPDownloader::Download(const std::string &url)
     {
         curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteData);
-        curl_easy_setopt(curl, CURLOPT_WRITEDATA, out);
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &out);
         if (curl_easy_perform(curl) != CURLE_OK) {
             throw std::runtime_error("Unable to download from website");
         }
