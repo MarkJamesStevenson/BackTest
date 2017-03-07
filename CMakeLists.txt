@@ -11,9 +11,10 @@ execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" .
 execute_process(COMMAND ${CMAKE_COMMAND} --build .
   WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/googletest-download )
 
-set(curl_directory "C:/libcurl/curl")
-include_directories("${curl_directory}/include")
-set(curl_library "${curl_directory}/builds/libcurl-vc14-x64-release-dll-ipv6-sspi-winssl/lib/libcurl.lib")
+find_package(CURL REQUIRED)
+#set(curl_directory "C:/libcurl/curl")
+#include_directories("${curl_directory}/include")
+#set(curl_library "${curl_directory}/builds/libcurl-vc14-x64-release-dll-ipv6-sspi-winssl/lib/libcurl.lib")
 
 # Prevent GoogleTest from overriding our compiler/linker options
 # when building with Visual Studio
@@ -42,9 +43,9 @@ add_library (BackTester ${sources})
 #target_include_directories (BackTester PUBLIC ${sources})
 
 add_executable(${PROJECT_NAME} src/main.cpp)
-target_link_libraries(${PROJECT_NAME} BackTester ${curl_library})
+target_link_libraries(${PROJECT_NAME} BackTester ${CURL_LIBRARIES})
 
 add_executable(test_runner ${sources_test})
-target_link_libraries(test_runner gtest_main BackTester ${curl_library})
+target_link_libraries(test_runner gtest_main BackTester ${CURL_LIBRARIES})
 
 enable_testing()
