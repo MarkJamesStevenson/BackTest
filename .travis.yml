@@ -3,14 +3,13 @@ language: cpp
 compiler:
   - gcc
 install:
-- if [ "$CXX" = "g++" ]; then export CXX="g++-5" CC="gcc-5"; fi
+- if [ "$CXX" = "g++" ]; then export CXX="g++-6" CC="gcc-6"; fi
 addons:
   apt:
     sources:
     - ubuntu-toolchain-r-test
     packages:
-    - gcc-5
-    - g++-5
+    - g++-6
 before_script:
   - mkdir build
   - cd build
