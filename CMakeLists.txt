@@ -1,5 +1,5 @@
 project(BackTest)
-cmake_minimum_required(VERSION 2.8.12)
+cmake_minimum_required(VERSION 2.8)
 
 # Download and unpack googletest at configure time
 configure_file(CMakeLists.txt.in.txt
@@ -37,7 +37,7 @@ file(GLOB_RECURSE sources      src/BackTester/*.cpp src/BackTester/*.h)
 file(GLOB_RECURSE sources_test src/test/*.cpp)
 
 add_library (BackTester ${sources})
-target_include_directories (BackTester PUBLIC ${sources})
+#target_include_directories (BackTester PUBLIC ${sources})
 
 add_executable(${PROJECT_NAME} src/main.cpp)
 target_link_libraries(${PROJECT_NAME} BackTester ${curl_library})
