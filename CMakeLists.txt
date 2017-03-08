@@ -3,6 +3,8 @@ cmake_minimum_required(VERSION 2.8)
 set (CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set( CMAKE_INCLUDE_PATH "C:/libcurl/curl/include")
+
 # Download and unpack googletest at configure time
 configure_file(CMakeLists.txt.in.txt
                googletest-download/CMakeLists.txt)
