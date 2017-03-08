@@ -2,6 +2,7 @@ sudo: false
 language: cpp
 compiler:
   - gcc
+  - clang
 install:
 - if [ "$CXX" = "g++" ]; then export CXX="g++-6" CC="gcc-6"; fi
 addons:
@@ -10,6 +11,7 @@ addons:
     - ubuntu-toolchain-r-test
     packages:
     - g++-6
+    - clang
 before_script:
   - mkdir build
   - cd build
