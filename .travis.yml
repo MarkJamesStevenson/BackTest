@@ -13,6 +13,7 @@ addons:
 before_script:
   - mkdir build
   - cd build
-  - cmake --version
-  - cmake -DCMAKE_VERBOSE_MAKEFILE=ON ..
-script: make && ./test_runner
+  - cmake ..
+script: 
+  - make 
+  - ./test_runner

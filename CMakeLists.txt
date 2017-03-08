@@ -3,8 +3,6 @@ cmake_minimum_required(VERSION 2.8)
 set (CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set( CMAKE_INCLUDE_PATH "C:/libcurl/curl/include")
-
 # Download and unpack googletest at configure time
 configure_file(CMakeLists.txt.in.txt
                googletest-download/CMakeLists.txt)
@@ -13,10 +11,15 @@ execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" .
 execute_process(COMMAND ${CMAKE_COMMAND} --build .
   WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/googletest-download )
 
-find_package(CURL REQUIRED)
-#set(curl_directory "C:/libcurl/curl")
-#include_directories("${curl_directory}/include")
-#set(curl_library "${curl_directory}/builds/libcurl-vc14-x64-release-dll-ipv6-sspi-winssl/lib/libcurl.lib")
+find_package(CURL)
+if(CURL_FOUND)
+    message("found curl")
+else ()
+    message("giving a few hints to find curl")
+    set(curl_directory "C:/libcurl/curl")
+    include_directories("${curl_directory}/include")
+    set(CURL_LIBRARIES "${curl_directory}/builds/libcurl-vc14-x64-release-dll-ipv6-sspi-winssl/lib/libcurl.lib")
+endif(CURL_FOUND)
 
 # Prevent GoogleTest from overriding our compiler/linker options
 # when building with Visual Studio
