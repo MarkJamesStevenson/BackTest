@@ -5,13 +5,23 @@ compiler:
   - clang
 install:
 - if [ "$CXX" = "g++" ]; then export CXX="g++-6" CC="gcc-6"; fi
-addons:
-  apt:
-    sources:
-    - ubuntu-toolchain-r-test
-    packages:
-    - g++-6
-    - clang
+matrix:
+  include:
+    - os: linux
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['g++-6']
+      env: COMPILER=g++-6
+
+    - os: linux
+      compiler: clang
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test', 'llvm-toolchain-precise-3.7']
+          packages: ['clang-3.7']
+      env: COMPILER=clang++-3.7
 before_script:
   - mkdir build
   - cd build
