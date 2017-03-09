@@ -3,8 +3,7 @@ language: cpp
 compiler:
   - gcc
   - clang
-install:
-- if [ "$CXX" = "g++" ]; then export CXX="g++-6" CC="gcc-6"; fi
+
 addons:
   apt:
     packages:
@@ -22,8 +21,7 @@ matrix:
       env: COMPILER=g++-6 ENABLE_MEMCHECK=true
       compiler: gcc
 
-- if [[ "${LLVM_VERSION}" == "default" ]]; then LLVM_VERSION=3.9.0; fi
-- if [[ "${COMPILER}" != "" ]]; then export CXX=${COMPILER}; fi
+
 
   ############################################################################
   # Install Clang, libc++ and libc++abi
@@ -51,6 +49,11 @@ matrix:
       export PATH="${LLVM_DIR}/clang/bin:${PATH}"
     fi
   - ${CXX} --version
+
+install:
+- if [ "$CXX" = "g++" ]; then export CXX="g++-6" CC="gcc-6"; fi
+- if [[ "${LLVM_VERSION}" == "default" ]]; then LLVM_VERSION=3.9.0; fi
+- if [[ "${COMPILER}" != "" ]]; then export CXX=${COMPILER}; fi
 
 before_script:
   - mkdir build
