@@ -5,15 +5,13 @@ compiler:
   - clang
 install:
 - if [ "$CXX" = "g++" ]; then export CXX="g++-6" CC="gcc-6"; fi
-- if [ "$CXX" == "clang++" ]; then export CXXFLAGS="-std=c++14 -stdlib=libc++"; fi
 addons:
   apt:
     sources:
     - ubuntu-toolchain-r-test
-    - llvm-toolchain-precise
     packages:
     - g++-6
-    - clang-5.0
+    - clang
 before_script:
   - mkdir build
   - cd build
