@@ -11,8 +11,9 @@ addons:
       - g++-6
     sources: &sources
       - ubuntu-toolchain-r-test
+
 matrix:
-  include:
+
     - os: linux
       env: LLVM_VERSION=3.9.0 ENABLE_MEMCHECK=true
       compiler: clang
@@ -21,7 +22,7 @@ matrix:
       env: COMPILER=g++-6 ENABLE_MEMCHECK=true
       compiler: gcc
 
-
+install:
 
   ############################################################################
   # Install Clang, libc++ and libc++abi
@@ -50,7 +51,6 @@ matrix:
     fi
   - ${CXX} --version
 
-install:
 - if [ "$CXX" = "g++" ]; then export CXX="g++-6" CC="gcc-6"; fi
 - if [[ "${LLVM_VERSION}" == "default" ]]; then LLVM_VERSION=3.9.0; fi
 - if [[ "${COMPILER}" != "" ]]; then export CXX=${COMPILER}; fi
