@@ -9,13 +9,10 @@ addons:
   apt:
     sources:
     - ubuntu-toolchain-r-test
+    - llvm-toolchain-precise
     packages:
     - g++-6
-addons:
-  apt:
-    sources: *sources
-    packages:
-    - clang-3.8
+    - clang-5.0
 before_script:
   - mkdir build
   - cd build
