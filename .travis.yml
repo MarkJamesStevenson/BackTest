@@ -5,6 +5,7 @@ compiler:
   - clang
 install:
 - if [ "$CXX" = "g++" ]; then export CXX="g++-6" CC="gcc-6"; fi
+- if [ "$CXX" == "clang++" ]; then export CXXFLAGS="-std=c++14 -stdlib=libc++"; fi
 addons:
   apt:
     sources:
