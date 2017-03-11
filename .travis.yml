@@ -8,6 +8,13 @@ matrix:
       env:
         - COMPILER=g++-6
         - COMPILEREXEC=g++-6
+      addons:
+        apt:
+          packages:
+            - g++-6
+          sources: &sources
+            - llvm-toolchain-precise-3.9
+            - ubuntu-toolchain-r-test
     - os: osx
       compiler: clang
 
@@ -16,9 +23,9 @@ before_install:
     if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
       sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
       sudo apt-get update -qq
-      if [[ "${COMPILER}" == "g++-6" ]]; then
-        sudo apt-get install g++-6 -y
-      fi
+      #if [[ "${COMPILER}" == "g++-6" ]]; then
+      #  sudo apt-get install g++-6 -y
+      #fi
       if [[ "${COMPILER}" == "clang++-3.4" ]]; then
         sudo apt-get install clang-3.4 -y
       fi
