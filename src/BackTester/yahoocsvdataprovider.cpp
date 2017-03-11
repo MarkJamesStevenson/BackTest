@@ -38,7 +38,7 @@ void YahooCSVDataProvider::PopulateBars(const std::string &stockData)
             const std::vector<std::string> data = StringUtils::Split(line);
             if (data.size() != 7)
             {
-                throw std::range_error(std::string("Vector should be of size 7. Received: " + data.size()));
+                throw std::range_error(std::string("Vector should be of size 7. Received: " + std::to_string(data.size())));
             }
             const std::string date = data[0];
             double open = std::stod(data[1]);
