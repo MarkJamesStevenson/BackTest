@@ -1,4 +1,4 @@
-sudo: required
+sudo: false
 language: cpp
 
 matrix:
@@ -10,8 +10,7 @@ matrix:
         apt:
           packages:
             - g++-6
-          sources: &sources
-            - llvm-toolchain-precise-3.9
+          sources:
             - ubuntu-toolchain-r-test
     - os: osx
       compiler: clang
