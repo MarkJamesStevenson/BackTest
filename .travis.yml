@@ -5,9 +5,7 @@ matrix:
   include:
     - os: linux
       compiler: gcc
-      env:
-        - COMPILER=g++-6
-        - COMPILEREXEC=g++-6
+      env: COMPILER_NAME=gcc CXX=g++-6 CC=gcc-6
       addons:
         apt:
           packages:
@@ -21,8 +19,8 @@ matrix:
 before_install:
   - |
     if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
-      sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
-      sudo apt-get update -qq
+      #sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+      #sudo apt-get update -qq
       #if [[ "${COMPILER}" == "g++-6" ]]; then
       #  sudo apt-get install g++-6 -y
       #fi
