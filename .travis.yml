@@ -1,24 +1,32 @@
-sudo: false
-language: generic
-os: osx
+sudo: required
+language: cpp
+
 matrix:
   include:
     - os: linux
-      env: COMPILER_NAME=gcc CXX=g++-6 CC=gcc-6
-      addons:
-        apt:
-          packages:
-            - g++-6
-          sources: &sources
-            - llvm-toolchain-precise-3.9
-            - ubuntu-toolchain-r-test
-    - os: linux
-      env: COMPILER_NAME=clang CXX=clang++-3.9 CC=clang-3.9
-      addons:
-        apt:
-          packages:
-            - clang-3.9
-          sources: *sources
+      compiler: gcc
+      env:
+        - COMPILER=g++-6
+        - COMPILEREXEC=g++-6
+    - os: osx
+      compiler: clang
+
+before_install:
+  - |
+    if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
+      sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+      sudo apt-get update -qq
+      if [[ "${COMPILER}" == "g++-6" ]]; then
+        sudo apt-get install g++-6 -y
+      fi
+      if [[ "${COMPILER}" == "clang++-3.4" ]]; then
+        sudo apt-get install clang-3.4 -y
+      fi
+      if [[ "${COMPILER}" == "clang++-3.7" ]]; then
+        sudo apt-get install clang-3.7 -y
+      fi
+    fi
+
 before_script:
   - mkdir build
   - cd build
