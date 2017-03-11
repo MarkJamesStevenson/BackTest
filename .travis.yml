@@ -17,13 +17,13 @@ matrix:
 
 install:
 - if [ "$CXX" = "g++" ]; then 
-    export CXX="g++-6"
+    export CXX="g++-6";
   fi
 
 before_script:
   - mkdir build
   - cd build
-  - cmake -DCMAKE_BUILD_TYPE=Release ..
+  - cmake ..
 script: 
   - make 
   - ./test_runner
