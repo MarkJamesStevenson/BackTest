@@ -16,7 +16,9 @@ matrix:
       compiler: clang
 
 install:
-- if [ "$CXX" = "g++" ]; then export CXX="g++-6"; fi
+- if [ "$CXX" = "g++" ]; then 
+  export CXX="g++-6"; 
+fi
 
 before_script:
   - mkdir build
