@@ -13,25 +13,35 @@
 #include "BackTester/portfoliohandler.h"
 #include "BackTester/broker.h"
 #include "BackTester/interactivebrokers.h"
+#include "BackTester/dataproviderfactory.h"
+
+std::unique_ptr<DataProvider> GetDataProvider(DataProviderFactory::DataSource dataSource,
+                                              std::string symbol)
+{
+    std::unique_ptr<DataProvider> dataProvider = nullptr;
+    try {
+        DataProviderFactory dataProviderFactory;
+        dataProvider = dataProviderFactory.GetDataProvider(dataSource, symbol);
+    } catch (const std::exception& e) {
+        std::cerr << "Unable to continue as could not create data provider\n"
+                  << e.what() << "\n";
+        exit(EXIT_FAILURE);
+    }
+    return dataProvider;
+}
 
 int main(int argc, char *argv[])
 {
     EventQueue eventQueue;
-    YahooCSVDataProvider dataProvider;
-    try {
-        dataProvider.Initialise("FDSA.L");
-    } catch (const std::exception& e) {
-        std::cerr << "Unable to continue as could not initialise data provider\n"
-                  << e.what() << "\n";
-        exit(EXIT_FAILURE);
-    }
+    std::unique_ptr<DataProvider> dataProvider = GetDataProvider(
+                DataProviderFactory::DataSource::YAHOOCSVDATAPROVIDER, "FDSA.L");
     StateMachine stateMachine;
     std::unique_ptr<Strategy> strategy(std::make_unique<BuyAndHoldStrategy>());
     std::unique_ptr<Broker> broker(std::make_unique<InteractiveBrokers>());
     PortfolioHandler portfolio;
-    while (dataProvider.DataAvailable())
+    while (dataProvider->DataAvailable())
     {
-        dataProvider.UpdateBars(eventQueue);
+        dataProvider->UpdateBars(eventQueue);
         while (!eventQueue.IsEmpty())
         {
             std::unique_ptr<Event> event = eventQueue.GetNextEvent();
