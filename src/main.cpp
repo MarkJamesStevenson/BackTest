@@ -35,6 +35,11 @@ int main(int argc, char *argv[])
     EventQueue eventQueue;
     std::unique_ptr<DataProvider> dataProvider = GetDataProvider(
                 DataProviderFactory::DataSource::YAHOOCSVDATAPROVIDER, "FDSA.L");
+    if (dataProvider == nullptr)
+    {
+        std::cerr << "Unable to continue as could not create data provider\n";
+        exit(EXIT_FAILURE);
+    }
     StateMachine stateMachine;
     std::unique_ptr<Strategy> strategy(std::make_unique<BuyAndHoldStrategy>());
     std::unique_ptr<Broker> broker(std::make_unique<InteractiveBrokers>());
