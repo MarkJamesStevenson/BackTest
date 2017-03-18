@@ -15,6 +15,9 @@ public:
     DataProviderFactory() = default;
 
     std::unique_ptr<DataProvider> GetDataProvider(DataSource provider, std::string symbol);
+
+    DataProviderFactory(const DataProvider&) = delete;
+    DataProviderFactory& operator=(const DataProviderFactory&) = delete;
 };
 
 #endif // DATAPROVIDERFACTORY_H
