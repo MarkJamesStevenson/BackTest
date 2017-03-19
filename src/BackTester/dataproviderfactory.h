@@ -5,13 +5,13 @@
 #include <memory>
 #include "dataprovider.h"
 
+enum class DataSource {
+    YAHOOCSVDATAPROVIDER
+};
+
 class DataProviderFactory
 {
 public:
-    enum class DataSource {
-        YAHOOCSVDATAPROVIDER
-    };
-
     DataProviderFactory() = default;
 
     std::unique_ptr<DataProvider> GetDataProvider(DataSource provider, std::string symbol);

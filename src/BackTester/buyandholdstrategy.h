@@ -3,11 +3,12 @@
 
 #include "strategy.h"
 class MarketEvent;
+class DataProvider;
 
 class BuyAndHoldStrategy : public Strategy
 {
 public:
-    BuyAndHoldStrategy() = default;
+    BuyAndHoldStrategy(DataProvider* dataProvider) : Strategy(dataProvider) {}
 
     void ProcessMarketEvent(const MarketEvent& marketEvent) override;
 private:

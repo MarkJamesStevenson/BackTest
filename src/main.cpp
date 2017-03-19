@@ -14,8 +14,8 @@
 #include "BackTester/dataproviderfactory.h"
 #include <QObject>
 
-std::unique_ptr<DataProvider> CreateDataProvider(DataProviderFactory::DataSource dataSource,
-                                              std::string symbol)
+std::unique_ptr<DataProvider> CreateDataProvider(DataSource dataSource,
+                                                 std::string symbol)
 {
     std::unique_ptr<DataProvider> dataProvider = nullptr;
     try {
@@ -32,7 +32,7 @@ std::unique_ptr<DataProvider> CreateDataProvider(DataProviderFactory::DataSource
 int main(int argc, char *argv[])
 {
     std::unique_ptr<DataProvider> dataProvider = CreateDataProvider(
-                DataProviderFactory::DataSource::YAHOOCSVDATAPROVIDER,
+                DataSource::YAHOOCSVDATAPROVIDER,
                 "FDSA.L");
     if (dataProvider == nullptr)
     {
@@ -40,10 +40,10 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
     PortfolioHandler portfolio;
-    std::unique_ptr<Strategy> strategy(std::make_unique<BuyAndHoldStrategy>());
+    std::unique_ptr<Strategy> strategy(std::make_unique<BuyAndHoldStrategy>(dataProvider.get()));
     std::unique_ptr<Broker> broker(std::make_unique<InteractiveBrokers>(portfolio));
-    QObject::connect(dataProvider.get(), SIGNAL(BarsUpdate(const MarketEvent&)),
-                     strategy.get(), SLOT(ProcessMarketEvent(const MarketEvent&)));
+    //QObject::connect(dataProvider.get(), SIGNAL(BarsUpdate(const MarketEvent&)),
+    //                 strategy.get(), SLOT(ProcessMarketEvent(const MarketEvent&)));
     while (dataProvider->DataAvailable())
     {
         dataProvider->UpdateBars();

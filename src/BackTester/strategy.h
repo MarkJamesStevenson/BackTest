@@ -2,16 +2,14 @@
 #define STRATEGY_H
 
 #include <QObject>
-
-class EventQueue;
-#include "marketevent.h"
-#include <iostream>
+class DataProvider;
+class MarketEvent;
 
 class Strategy : public QObject
 {
     Q_OBJECT
 public:   
-    Strategy() = default;
+    Strategy(DataProvider* dataProvider);
 
     virtual ~Strategy() = default;
 
