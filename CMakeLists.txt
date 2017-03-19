@@ -45,10 +45,21 @@ endif()
 
 # Now simply link your own targets against gtest, gmock,
 # etc. as appropriate
-file(GLOB_RECURSE sources      src/BackTester/*.cpp src/BackTester/*.h)
+file(GLOB_RECURSE sources      src/BackTester/Brokers/*.cpp src/BackTester/Brokers/*.h
+                               src/BackTester/DataProviders/*.cpp src/BackTester/DataProviders/*.h
+                               src/BackTester/Strategies/*.cpp src/BackTester/Strategies/*.h
+                               src/BackTester/Utilities/*.cpp src/BackTester/Utilities/*.h
+                               src/BackTester/Events/*.cpp src/BackTester/Events/*.h
+                               src/BackTester/Portfolios/*.cpp src/BackTester/Portfolios/*.h)
 file(GLOB_RECURSE sources_test src/test/*.cpp)
 
 add_library (BackTester ${sources})
+include_directories(src/BackTester/Brokers
+                    src/BackTester/DataProviders
+                    src/BackTester/Strategies
+                    src/BackTester/Utilities
+                    src/BackTester/Events
+                    src/BackTester/Portfolios)
 #target_include_directories (BackTester PUBLIC ${sources})
 target_link_libraries(BackTester Qt5::Widgets)
 

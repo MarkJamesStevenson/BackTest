@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
-#include "../BackTester/signalevent.h"
-#include "../BackTester/event.h"
+#include "signalevent.h"
+#include "event.h"
 
 TEST (SignalEvent, Create) {
     SignalEvent event("BLMB", SignalEvent::SignalType::LONG, 10.0);

@@ -1,4 +1,4 @@
-#include "../BackTester/stringutils.h"
+#include "stringutils.h"
 #include "gtest/gtest.h"
 #include <vector>
 

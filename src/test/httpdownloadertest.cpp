@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "../BackTester/httpdownloader.h"
+#include "httpdownloader.h"
 
 
 TEST (HTTPDownloader, checkDataConsistency) {

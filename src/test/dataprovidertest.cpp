@@ -1,4 +1,4 @@
-#include "../BackTester/dataprovider.h"
+#include "dataprovider.h"
 #include "gtest/gtest.h"
 
 TEST (DataProvider, UpdateBarsWithEmptyEventVector) {

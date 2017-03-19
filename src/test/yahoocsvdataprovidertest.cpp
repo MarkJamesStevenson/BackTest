@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "../BackTester/yahoocsvdataprovider.h"
+#include "yahoocsvdataprovider.h"
 
 TEST (YahooCSVDataProvider, ConstructUrl) {
     std::string url = ConstructUrl("FDSA.L",

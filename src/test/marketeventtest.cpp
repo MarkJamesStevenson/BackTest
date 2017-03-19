@@ -1,8 +1,8 @@
 #include <gtest/gtest.h>
-#include "../BackTester/marketevent.h"
-#include "../BackTester/ohlcdatapoint.h"
+#include "marketevent.h"
+#include "ohlcdatapoint.h"
 #include <sstream>
-#include "../BackTester/event.h"
+#include "event.h"
 
 TEST (MarketEvent, Create) {
     OHLCDataPoint data("date",10, 5, 15, 20, 50, 10);

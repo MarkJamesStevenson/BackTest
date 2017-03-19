@@ -1,8 +1,8 @@
 #include <gtest/gtest.h>
-#include "../BackTester/orderevent.h"
-#include "../BackTester/event.h"
+#include "orderevent.h"
+#include "event.h"
 #include <sstream>
-#include "../BackTester/event.h"
+#include "event.h"
 
 TEST (OrderEventTest, Create) {
     OrderEvent orderEvent("BLMB", Event::OrderType::LIM, 10, 19.0, Event::Direction::BUY);

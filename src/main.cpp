@@ -1,17 +1,17 @@
-#include "BackTester/dataprovider.h"
-#include "BackTester/yahoocsvdataprovider.h"
-#include "BackTester/event.h"
+#include "dataprovider.h"
+#include "yahoocsvdataprovider.h"
+#include "event.h"
 #include <iostream>
 #include <stdlib.h>
 #include <memory>
 #include <chrono>
 #include <thread>
-#include "BackTester/strategy.h"
-#include "BackTester/buyandholdstrategy.h"
-#include "BackTester/portfoliohandler.h"
-#include "BackTester/broker.h"
-#include "BackTester/interactivebrokers.h"
-#include "BackTester/dataproviderfactory.h"
+#include "strategy.h"
+#include "buyandholdstrategy.h"
+#include "portfoliohandler.h"
+#include "broker.h"
+#include "interactivebrokers.h"
+#include "dataproviderfactory.h"
 #include <QObject>
 
 std::unique_ptr<DataProvider> CreateDataProvider(DataSource dataSource,
@@ -42,8 +42,6 @@ int main(int argc, char *argv[])
     PortfolioHandler portfolio;
     std::unique_ptr<Strategy> strategy(std::make_unique<BuyAndHoldStrategy>(dataProvider.get()));
     std::unique_ptr<Broker> broker(std::make_unique<InteractiveBrokers>(portfolio));
-    //QObject::connect(dataProvider.get(), SIGNAL(BarsUpdate(const MarketEvent&)),
-    //                 strategy.get(), SLOT(ProcessMarketEvent(const MarketEvent&)));
     while (dataProvider->DataAvailable())
     {
         dataProvider->UpdateBars();
