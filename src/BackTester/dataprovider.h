@@ -4,10 +4,14 @@
 #include <string>
 #include <vector>
 #include "ohlcdatapoint.h"
+#include <QObject>
+
+class MarketEvent;
 class EventQueue;
 
-class DataProvider
+class DataProvider : public QObject
 {
+    Q_OBJECT
 public:
     DataProvider() = default;
 
@@ -18,9 +22,12 @@ public:
     // the required stock data before running.
     virtual void Initialise(const std::string& symbol) {}
 
+    bool DataAvailable() const;
+
     void UpdateBars();
 
-    bool DataAvailable() const;
+signals:
+    virtual void BarsUpdate(const MarketEvent&);
 
 protected:
     std::vector<OHLCDataPoint> bars;

@@ -9,8 +9,7 @@ class BuyAndHoldStrategy : public Strategy
 public:
     BuyAndHoldStrategy() = default;
 
-    void ProcessDataUpdate(EventQueue& eventQueue, MarketEvent* marketEvent) override;
-
+    void ProcessMarketEvent(const MarketEvent& marketEvent) override;
 private:
     bool bought = false;
 };

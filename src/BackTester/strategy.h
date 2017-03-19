@@ -1,19 +1,22 @@
 #ifndef STRATEGY_H
 #define STRATEGY_H
 
-class EventQueue;
-class MarketEvent;
+#include <QObject>
 
-class Strategy
+class EventQueue;
+#include "marketevent.h"
+#include <iostream>
+
+class Strategy : public QObject
 {
+    Q_OBJECT
 public:   
     Strategy() = default;
 
     virtual ~Strategy() = default;
 
-    // This function should add either a RETURN_TO_IDLE event or
-    // SIGNAL_EVENT to the eventQueue
-    virtual void ProcessDataUpdate(EventQueue& eventQueue, MarketEvent* marketEvent) = 0;
+public slots:
+    virtual void ProcessMarketEvent(const MarketEvent& marketEvent) = 0;
 };
 
 #endif // STRATEGY_H

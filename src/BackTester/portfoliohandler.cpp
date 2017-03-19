@@ -1,10 +1,8 @@
 #include "portfoliohandler.h"
 #include "signalevent.h"
 #include "marketevent.h"
-#include "returntoidleevent.h"
 #include "orderevent.h"
 #include "fillevent.h"
-#include "eventqueue.h"
 
 #include <memory>
 #include <iostream>
@@ -18,42 +16,39 @@ void PortfolioHandler::SignalUpdate(EventQueue &eventQueue, SignalEvent *signalE
         std::cout << "the amount of capital available is " << capital << std::endl;
         if (capitalToSpend <= capital) {
             // Just support market orders currently
-            eventQueue.AddEvent(std::make_unique<OrderEvent>(signalEvent->GetSymbol(),
+            /*eventQueue.AddEvent(std::make_unique<OrderEvent>(signalEvent->GetSymbol(),
                                                              Event::OrderType::MKT,
                                                              volumePerTransaction,
                                                              signalEvent->GetPrice(),
-                                                             Event::Direction::BUY));
+                                                             Event::Direction::BUY));*/
         } else {
             std::cout << "Portfolio is taking no long action" << std::endl;
-            eventQueue.AddEvent(std::make_unique<ReturnToIdleEvent>());
         }
     } else if (signalEvent->GetSignalType() == Event::SignalType::SHORT){
         // We are selling so will always do the transaction
-        eventQueue.AddEvent(std::make_unique<OrderEvent>(signalEvent->GetSymbol(),
+        /*eventQueue.AddEvent(std::make_unique<OrderEvent>(signalEvent->GetSymbol(),
                                                          Event::OrderType::MKT,
                                                          volumePerTransaction,
                                                          signalEvent->GetPrice(),
-                                                         Event::Direction::SELL));
+                                                         Event::Direction::SELL));*/
     } else if (signalEvent->GetSignalType() == Event::SignalType::EXIT) {
         if (volumeInvested > 0) {
-            eventQueue.AddEvent(std::make_unique<OrderEvent>(signalEvent->GetSymbol(),
+            /*eventQueue.AddEvent(std::make_unique<OrderEvent>(signalEvent->GetSymbol(),
                                                              Event::OrderType::MKT,
                                                              volumeInvested,
                                                              signalEvent->GetPrice(),
-                                                             Event::Direction::SELL));
+                                                             Event::Direction::SELL));*/
         } else if (volumeInvested < 0) {
-            eventQueue.AddEvent(std::make_unique<OrderEvent>(signalEvent->GetSymbol(),
+            /*eventQueue.AddEvent(std::make_unique<OrderEvent>(signalEvent->GetSymbol(),
                                                              Event::OrderType::MKT,
                                                              volumeInvested,
                                                              signalEvent->GetPrice(),
-                                                             Event::Direction::BUY));
+                                                             Event::Direction::BUY));*/
         } else {
-            std::cout << "Portfolio is taking no action" << std::endl;
-            eventQueue.AddEvent(std::make_unique<ReturnToIdleEvent>());
+            std::cout << "Portfolio is taking no action as no volume invested" << std::endl;
         }
     } else {
         std::cout << "Portfolio is taking no action" << std::endl;
-        eventQueue.AddEvent(std::make_unique<ReturnToIdleEvent>());
     }
 }
 

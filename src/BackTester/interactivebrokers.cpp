@@ -2,7 +2,6 @@
 #include <algorithm>
 #include "orderevent.h"
 #include "fillevent.h"
-#include "eventqueue.h"
 #include <iostream>
 
 void InteractiveBrokers::ExecuteOrder(const OrderEvent& event)

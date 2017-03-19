@@ -1,4 +1,3 @@
-#include "BackTester/eventqueue.h"
 #include "BackTester/dataprovider.h"
 #include "BackTester/yahoocsvdataprovider.h"
 #include "BackTester/event.h"
@@ -7,13 +6,13 @@
 #include <memory>
 #include <chrono>
 #include <thread>
-#include "BackTester/statemachine.h"
 #include "BackTester/strategy.h"
 #include "BackTester/buyandholdstrategy.h"
 #include "BackTester/portfoliohandler.h"
 #include "BackTester/broker.h"
 #include "BackTester/interactivebrokers.h"
 #include "BackTester/dataproviderfactory.h"
+#include <QObject>
 
 std::unique_ptr<DataProvider> CreateDataProvider(DataProviderFactory::DataSource dataSource,
                                               std::string symbol)
@@ -43,12 +42,13 @@ int main(int argc, char *argv[])
     PortfolioHandler portfolio;
     std::unique_ptr<Strategy> strategy(std::make_unique<BuyAndHoldStrategy>());
     std::unique_ptr<Broker> broker(std::make_unique<InteractiveBrokers>(portfolio));
-
+    QObject::connect(dataProvider.get(), SIGNAL(BarsUpdate(const MarketEvent&)),
+                     strategy.get(), SLOT(ProcessMarketEvent(const MarketEvent&)));
     while (dataProvider->DataAvailable())
     {
         dataProvider->UpdateBars();
         std::cout << "sleeping for 0.2 seconds" << std::endl;
-        std::this_thread::sleep_for(std::chrono::milliseconds(50));
+        std::this_thread::sleep_for(std::chrono::milliseconds(5000));
     }
 }
 
