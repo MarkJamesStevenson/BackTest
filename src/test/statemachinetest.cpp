@@ -20,7 +20,7 @@ public:
     OHLCDataPoint datapoint;
     PortfolioHandler portfolio;
     std::unique_ptr<Strategy> strategy = std::make_unique<BuyAndHoldStrategy>();
-    std::unique_ptr<Broker> broker = std::make_unique<InteractiveBrokers>();
+    std::unique_ptr<Broker> broker = std::make_unique<InteractiveBrokers>(portfolio);
 
     StateMachineTest() : datapoint("test", 10, 20, 30, 30, 20, 10) {}
 

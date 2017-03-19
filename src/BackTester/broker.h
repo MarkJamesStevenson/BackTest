@@ -11,8 +11,7 @@ public:
 
     virtual ~Broker() = default;
 
-    // This should always add a fill event to the eventqueue
-    virtual void ExecuteOrder(EventQueue& eventQueue, OrderEvent* event) = 0;
+    virtual void ExecuteOrder(const OrderEvent& event) = 0;
 };
 
 #endif // BROKER_H

@@ -15,7 +15,7 @@
 #include "BackTester/interactivebrokers.h"
 #include "BackTester/dataproviderfactory.h"
 
-std::unique_ptr<DataProvider> GetDataProvider(DataProviderFactory::DataSource dataSource,
+std::unique_ptr<DataProvider> CreateDataProvider(DataProviderFactory::DataSource dataSource,
                                               std::string symbol)
 {
     std::unique_ptr<DataProvider> dataProvider = nullptr;
@@ -32,28 +32,21 @@ std::unique_ptr<DataProvider> GetDataProvider(DataProviderFactory::DataSource da
 
 int main(int argc, char *argv[])
 {
-    EventQueue eventQueue;
-    std::unique_ptr<DataProvider> dataProvider = GetDataProvider(
-                DataProviderFactory::DataSource::YAHOOCSVDATAPROVIDER, "FDSA.L");
+    std::unique_ptr<DataProvider> dataProvider = CreateDataProvider(
+                DataProviderFactory::DataSource::YAHOOCSVDATAPROVIDER,
+                "FDSA.L");
     if (dataProvider == nullptr)
     {
         std::cerr << "Unable to continue as could not create data provider\n";
         exit(EXIT_FAILURE);
     }
-    StateMachine stateMachine;
-    std::unique_ptr<Strategy> strategy(std::make_unique<BuyAndHoldStrategy>());
-    std::unique_ptr<Broker> broker(std::make_unique<InteractiveBrokers>());
     PortfolioHandler portfolio;
+    std::unique_ptr<Strategy> strategy(std::make_unique<BuyAndHoldStrategy>());
+    std::unique_ptr<Broker> broker(std::make_unique<InteractiveBrokers>(portfolio));
+
     while (dataProvider->DataAvailable())
     {
-        dataProvider->UpdateBars(eventQueue);
-        while (!eventQueue.IsEmpty())
-        {
-            std::unique_ptr<Event> event = eventQueue.GetNextEvent();
-            if (event) {
-                stateMachine.DoTransition(eventQueue, event.get(), strategy.get(), portfolio, broker.get());
-            }
-        }
+        dataProvider->UpdateBars();
         std::cout << "sleeping for 0.2 seconds" << std::endl;
         std::this_thread::sleep_for(std::chrono::milliseconds(50));
     }

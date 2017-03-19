@@ -57,19 +57,16 @@ void PortfolioHandler::SignalUpdate(EventQueue &eventQueue, SignalEvent *signalE
     }
 }
 
-void PortfolioHandler::FillUpdate(EventQueue &eventQueue, FillEvent *fillEvent)
+void PortfolioHandler::FillUpdate(const FillEvent &fillEvent)
 {
-    if (fillEvent) {
-        capital -= fillEvent->GetFillCost() + fillEvent->GetCommission();
-        if (fillEvent->GetDirection() == Event::Direction::BUY) {
-            volumeInvested += fillEvent->GetVolumeFilled();
-        } else {
-            // Sold so we reduce volume invested
-            volumeInvested -= fillEvent->GetVolumeFilled();
-        }
+    capital -= fillEvent.GetFillCost() + fillEvent.GetCommission();
+    if (fillEvent.GetDirection() == Event::Direction::BUY) {
+        volumeInvested += fillEvent.GetVolumeFilled();
+    } else {
+        // Sold so we reduce volume invested
+        volumeInvested -= fillEvent.GetVolumeFilled();
     }
-    std::cout << "Processed the fill now returning to idle" << std::endl;
-    eventQueue.AddEvent(std::make_unique<ReturnToIdleEvent>());
+    std::cout << "Processed the fill event" << std::endl;
 }
 
 void PortfolioHandler::MarketUpdate(MarketEvent *marketEvent)

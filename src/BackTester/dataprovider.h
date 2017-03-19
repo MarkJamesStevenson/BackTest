@@ -18,7 +18,7 @@ public:
     // the required stock data before running.
     virtual void Initialise(const std::string& symbol) {}
 
-    void UpdateBars(EventQueue& eventQueue);
+    void UpdateBars();
 
     bool DataAvailable() const;
 

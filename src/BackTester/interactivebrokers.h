@@ -2,6 +2,7 @@
 #define INTERACTIVEBROKERS_H
 
 #include "broker.h"
+#include "portfoliohandler.h"
 
 class EventQueue;
 class OrderEvent;
@@ -9,13 +10,17 @@ class OrderEvent;
 class InteractiveBrokers : public Broker
 {
 public:
-    InteractiveBrokers() = default;
+    InteractiveBrokers(PortfolioHandler portfolio) : portfolio(portfolio)
+    {}
 
-    void ExecuteOrder(EventQueue &eventQueue, OrderEvent* event) override;
+    void ExecuteOrder(const OrderEvent& event) override;
+
 private:
-    double CalculateCommission(OrderEvent *event) const;
+    PortfolioHandler portfolio;
 
-    double CalculateExchangeFees(OrderEvent* event) const;
+    double CalculateCommission(const OrderEvent &event) const;
+
+    double CalculateExchangeFees(const OrderEvent& event) const;
 };
 
 #endif // INTERACTIVEBROKERS_H

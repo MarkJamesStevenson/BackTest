@@ -5,11 +5,11 @@
 TEST (DataProvider, UpdateBarsWithEmptyEventQueue) {
     EventQueue eventQueue;
     DataProvider dataProvider;
-    EXPECT_DEATH(dataProvider.UpdateBars(eventQueue), "Should not call without checking it has data");
+    EXPECT_DEATH(dataProvider.UpdateBars(), "Should not call without checking it has data");
 }
 
 TEST (DataProvider, UpdateBars) {
     EventQueue eventQueue;
     DataProvider dataProvider;
-    EXPECT_DEATH(dataProvider.UpdateBars(eventQueue), "Should not call without checking it has data");
+    EXPECT_DEATH(dataProvider.UpdateBars(), "Should not call without checking it has data");
 }

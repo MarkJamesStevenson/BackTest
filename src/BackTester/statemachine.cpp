@@ -73,12 +73,6 @@ void SendOrderToBroker(EventQueue &eventQueue, Event* event, Strategy *strategy,
 {
     std::cout << "Sending order to broker\n";
     // This will always be an order event
-    OrderEvent* orderEvent = dynamic_cast<OrderEvent*>(event);
-    if (orderEvent) {
-        broker->ExecuteOrder(eventQueue, orderEvent);
-    } else {
-        assert(false && "should only be order events here");
-    }
 }
 
 void UpdatePortfolioFill(EventQueue &eventQueue, Event *event, Strategy *strategy, PortfolioHandler &portfolio, Broker *broker)
@@ -87,7 +81,7 @@ void UpdatePortfolioFill(EventQueue &eventQueue, Event *event, Strategy *strateg
     // This will always be a fill event
     FillEvent* fillEvent = dynamic_cast<FillEvent*>(event);
     if (fillEvent) {
-        portfolio.FillUpdate(eventQueue, fillEvent);
+        portfolio.FillUpdate(*fillEvent);
     } else {
         assert(false && "should only be fill events here");
     }

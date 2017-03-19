@@ -3,10 +3,10 @@
 #include "marketevent.h"
 #include <cassert>
 
-void DataProvider::UpdateBars(EventQueue& eventQueue)
+void DataProvider::UpdateBars()
 {
     assert(DataAvailable() && "Should not call without checking it has data");
-    eventQueue.AddEvent(std::make_unique<MarketEvent>(bars.back()));
+    //eventQueue.AddEvent(std::make_unique<MarketEvent>(bars.back()));
     bars.pop_back();
 }
 

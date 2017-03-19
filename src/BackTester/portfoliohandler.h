@@ -20,7 +20,7 @@ public:
 
     void SignalUpdate(EventQueue& eventQueue, SignalEvent *signalEvent);
 
-    void FillUpdate(EventQueue &eventQueue, FillEvent* fillEvent);
+    void FillUpdate(const FillEvent& fillEvent);
 
     // Every heartbeat we need to update the current price of our holdings
     void MarketUpdate(MarketEvent* marketEvent);
