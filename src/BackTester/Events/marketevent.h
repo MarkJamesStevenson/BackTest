@@ -21,6 +21,8 @@ public:
 
     std::string GetDate() const { return dataPoint.date; }
 
+    std::string GetSymbol() const { return dataPoint.symbol; }
+
     friend std::ostream& operator<<(std::ostream& os, const MarketEvent& event);
 private:
     OHLCDataPoint dataPoint;

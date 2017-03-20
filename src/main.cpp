@@ -1,6 +1,5 @@
 #include "dataprovider.h"
 #include "yahoocsvdataprovider.h"
-#include "event.h"
 #include <iostream>
 #include <stdlib.h>
 #include <memory>
@@ -40,7 +39,7 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
     PortfolioHandler portfolio;
-    std::unique_ptr<Strategy> strategy(std::make_unique<BuyAndHoldStrategy>(dataProvider.get()));
+    std::unique_ptr<Strategy> strategy(std::make_unique<BuyAndHoldStrategy>(dataProvider.get(), &portfolio));
     std::unique_ptr<Broker> broker(std::make_unique<InteractiveBrokers>(portfolio));
     while (dataProvider->DataAvailable())
     {

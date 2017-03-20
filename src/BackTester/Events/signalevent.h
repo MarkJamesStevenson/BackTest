@@ -20,11 +20,11 @@ public:
         dateTime(std::chrono::system_clock::now())
     {}
 
-    SignalType GetSignalType() { return signal; }
+    SignalType GetSignalType() const { return signal; }
 
-    double GetPrice() { return price; }
+    double GetPrice() const { return price; }
 
-    std::string GetSymbol() { return symbol; }
+    std::string GetSymbol() const { return symbol; }
 
 private:
     std::string symbol;

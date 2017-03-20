@@ -5,7 +5,7 @@
 void DataProvider::UpdateBars()
 {
     assert(DataAvailable() && "Should not call without checking it has data");
-    emit BarsUpdate(MarketEvent(bars.back()));
+    emit PublishMarketEvent(MarketEvent(bars.back()));
     bars.pop_back();
 }
 

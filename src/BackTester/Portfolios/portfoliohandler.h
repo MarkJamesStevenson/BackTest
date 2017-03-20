@@ -18,7 +18,7 @@ public:
         capitalInvested(0.0)
     {}
 
-    void SignalUpdate(EventQueue& eventQueue, SignalEvent *signalEvent);
+    void OrderRequest(const SignalEvent& signalEvent);
 
     void FillUpdate(const FillEvent& fillEvent);
 

@@ -7,11 +7,10 @@
 #include <memory>
 #include <iostream>
 
-
-void PortfolioHandler::SignalUpdate(EventQueue &eventQueue, SignalEvent *signalEvent)
+void PortfolioHandler::OrderRequest(const SignalEvent& signalEvent)
 {
-    if (signalEvent->GetSignalType() == Event::SignalType::LONG) {
-        double capitalToSpend = volumePerTransaction * signalEvent->GetPrice();
+    if (signalEvent.GetSignalType() == Event::SignalType::LONG) {
+        double capitalToSpend = volumePerTransaction * signalEvent.GetPrice();
         std::cout << "the amount strategy wants to spend is " << capitalToSpend << std::endl;
         std::cout << "the amount of capital available is " << capital << std::endl;
         if (capitalToSpend <= capital) {
@@ -24,14 +23,14 @@ void PortfolioHandler::SignalUpdate(EventQueue &eventQueue, SignalEvent *signalE
         } else {
             std::cout << "Portfolio is taking no long action" << std::endl;
         }
-    } else if (signalEvent->GetSignalType() == Event::SignalType::SHORT){
+    } else if (signalEvent.GetSignalType() == Event::SignalType::SHORT){
         // We are selling so will always do the transaction
         /*eventQueue.AddEvent(std::make_unique<OrderEvent>(signalEvent->GetSymbol(),
                                                          Event::OrderType::MKT,
                                                          volumePerTransaction,
                                                          signalEvent->GetPrice(),
                                                          Event::Direction::SELL));*/
-    } else if (signalEvent->GetSignalType() == Event::SignalType::EXIT) {
+    } else if (signalEvent.GetSignalType() == Event::SignalType::EXIT) {
         if (volumeInvested > 0) {
             /*eventQueue.AddEvent(std::make_unique<OrderEvent>(signalEvent->GetSymbol(),
                                                              Event::OrderType::MKT,

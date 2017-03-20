@@ -18,10 +18,10 @@ void YahooCSVDataProvider::Initialise(const std::string &symbol)
                                          TradingPeriod::DAY);
     HTTPDownloader downloader;
     std::string stockData = downloader.Download(url);
-    PopulateBars(stockData);
+    PopulateBars(symbol, stockData);
 }
 
-void YahooCSVDataProvider::PopulateBars(const std::string &stockData)
+void YahooCSVDataProvider::PopulateBars(const std::string& symbol, const std::string &stockData)
 {
     std::istringstream stream(stockData);
     std::string line;
@@ -47,7 +47,7 @@ void YahooCSVDataProvider::PopulateBars(const std::string &stockData)
             double close = std::stod(data[4]);
             double volume = std::stod(data[5]);
             double adjClose = std::stod(data[6]);
-            bars.emplace_back(date, open, high, low, close, volume, adjClose);
+            bars.emplace_back(symbol, date, open, high, low, close, volume, adjClose);
         }
     }
 }

@@ -27,7 +27,7 @@ public:
     void UpdateBars();
 
 signals:
-    virtual void BarsUpdate(const MarketEvent&);
+    virtual void PublishMarketEvent(const MarketEvent&);
 
 protected:
     std::vector<OHLCDataPoint> bars;

@@ -35,7 +35,7 @@ public:
     void Initialise(const std::string& symbol) override;
 
 private:
-    void PopulateBars(const std::string& stockData);
+    void PopulateBars(const std::string &symbol, const std::string& stockData);
 };
 
 std::string ConstructUrl(const std::string& symbol,
