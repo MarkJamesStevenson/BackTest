@@ -19,7 +19,7 @@ std::unique_ptr<DataProvider> CreateDataProvider(DataSource dataSource,
     std::unique_ptr<DataProvider> dataProvider = nullptr;
     try {
         DataProviderFactory dataProviderFactory;
-        dataProvider = dataProviderFactory.GetDataProvider(dataSource, symbol);
+        dataProvider = dataProviderFactory.CreateDataProvider(dataSource, symbol);
     } catch (const std::exception& e) {
         std::cerr << "Unable to continue as could not create data provider\n"
                   << e.what() << "\n";

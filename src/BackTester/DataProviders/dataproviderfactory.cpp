@@ -4,7 +4,7 @@
 #include <memory>
 #include "dataprovider.h"
 
-std::unique_ptr<DataProvider> DataProviderFactory::GetDataProvider(DataSource provider, std::string symbol)
+std::unique_ptr<DataProvider> DataProviderFactory::CreateDataProvider(DataSource provider, std::string symbol)
 {
     std::unique_ptr<DataProvider> dataProvider = nullptr;
     switch (provider) {

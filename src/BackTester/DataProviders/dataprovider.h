@@ -26,6 +26,7 @@ public:
 
     void UpdateBars();
 
+    //Any class which needs market data can connect to this signal
 signals:
     virtual void PublishMarketEvent(const MarketEvent&);
 
