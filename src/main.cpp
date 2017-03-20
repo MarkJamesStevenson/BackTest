@@ -38,9 +38,9 @@ int main(int argc, char *argv[])
         std::cerr << "Unable to continue as could not create data provider\n";
         exit(EXIT_FAILURE);
     }
-    PortfolioHandler portfolio;
+    PortfolioHandler portfolio(dataProvider.get());
     std::unique_ptr<Strategy> strategy(std::make_unique<BuyAndHoldStrategy>(dataProvider.get(), &portfolio));
-    std::unique_ptr<Broker> broker(std::make_unique<InteractiveBrokers>(portfolio));
+    std::unique_ptr<Broker> broker(std::make_unique<InteractiveBrokers>(&portfolio));
     while (dataProvider->DataAvailable())
     {
         dataProvider->UpdateBars();

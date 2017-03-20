@@ -8,12 +8,12 @@ void InteractiveBrokers::ExecuteOrder(const OrderEvent& event)
 {
     double totalCommision = CalculateCommission(event) + CalculateExchangeFees(event);
     std::cout << "Commission is " << totalCommision << std::endl;
-    portfolio.FillUpdate({event.GetSymbol(),
-                                                    "LSE",
-                                                    event.GetVolume(),
-                                                    event.GetDirection(),
-                                                    event.GetVolume() * event.GetPricePerShare(),
-                                                    totalCommision});
+    portfolio->FillUpdate({event.GetSymbol(),
+                          "LSE",
+                          event.GetVolume(),
+                          event.GetDirection(),
+                          event.GetVolume() * event.GetPricePerShare(),
+                          totalCommision});
 }
 
 double InteractiveBrokers::CalculateCommission(const OrderEvent& event) const

@@ -3,9 +3,20 @@
 #include "marketevent.h"
 #include "orderevent.h"
 #include "fillevent.h"
+#include "dataprovider.h"
 
 #include <memory>
 #include <iostream>
+
+PortfolioHandler::PortfolioHandler(DataProvider *dataProvider, double initialCapital, int volumePerTransaction) :
+    capital(initialCapital),
+    volumePerTransaction(volumePerTransaction),
+    volumeInvested(0),
+    capitalInvested(0.0)
+{
+    QObject::connect(dataProvider, SIGNAL(PublishMarketEvent(const MarketEvent&)),
+                     this, SLOT(ProcessMarketEvent(const MarketEvent&)));
+}
 
 void PortfolioHandler::OrderRequest(const SignalEvent& signalEvent)
 {
@@ -63,17 +74,14 @@ void PortfolioHandler::FillUpdate(const FillEvent &fillEvent)
     std::cout << "Processed the fill event" << std::endl;
 }
 
-void PortfolioHandler::MarketUpdate(MarketEvent *marketEvent)
+void PortfolioHandler::ProcessMarketEvent(const MarketEvent& marketEvent)
 {
-    if (marketEvent)
-    {
-        // We presume the current price is the close price
-        double closePrice = marketEvent->GetClosePrice();
-        capitalInvested = closePrice * volumeInvested;
-        std::cout << "Date: " << marketEvent->GetDate() << "\n"
-                  << "Share price is: " << marketEvent->GetClosePrice() << "\n"
-                  << "Capital Invested is now at: " << capitalInvested << "\n"
-                  << "Remaining capital is: " << capital << "\n"
-                  << "Total capital is " << capitalInvested + capital << std::endl;
-    }
+    // We presume the current price is the close price
+    double closePrice = marketEvent.GetClosePrice();
+    capitalInvested = closePrice * volumeInvested;
+    std::cout << "Date: " << marketEvent.GetDate() << "\n"
+              << "Share price is: " << marketEvent.GetClosePrice() << "\n"
+              << "Capital Invested is now at: " << capitalInvested << "\n"
+              << "Remaining capital is: " << capital << "\n"
+              << "Total capital is " << capitalInvested + capital << std::endl;
 }
