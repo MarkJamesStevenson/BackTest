@@ -4,7 +4,6 @@
 #include "broker.h"
 #include "portfoliohandler.h"
 
-class EventQueue;
 class OrderEvent;
 
 class InteractiveBrokers : public Broker
@@ -12,6 +11,7 @@ class InteractiveBrokers : public Broker
 public:
     InteractiveBrokers() = default;
 
+public slots:
     void ProcessOrderEvent(const OrderEvent& event) override;
 
 private:

@@ -33,9 +33,6 @@ signals:
 
 public slots:
     virtual void ProcessMarketEvent(const MarketEvent& marketEvent) = 0;
-
-protected:
-    PortfolioHandler* portfolio;
 };
 
 #endif // STRATEGY_H

@@ -8,9 +8,9 @@
 #include <memory>
 #include <iostream>
 
-void PortfolioHandler::FillUpdate(const FillEvent &fillEvent)
+void PortfolioHandler::ProcessFillEvent(const FillEvent& fillEvent)
 {
-    capital -= fillEvent.GetFillCost() + fillEvent.GetCommission();
+    capital -= (fillEvent.GetFillCost() + fillEvent.GetCommission());
     if (fillEvent.GetDirection() == Event::Direction::BUY) {
         volumeInvested += fillEvent.GetVolumeFilled();
     } else {

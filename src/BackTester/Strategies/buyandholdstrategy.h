@@ -11,6 +11,7 @@ public:
     BuyAndHoldStrategy() = default;
 
     void ProcessMarketEvent(const MarketEvent& marketEvent) override;
+
 private:
     bool bought = false;
 };

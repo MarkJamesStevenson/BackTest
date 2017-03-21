@@ -40,6 +40,7 @@ public slots:
     void ProcessBuySignalEvent(const SignalEvent& signalEvent);
     void ProcessSellSignalEvent(const SignalEvent& signalEvent);
     void ProcessExitSignalEvent(const SignalEvent& signalEvent);
+    void ProcessFillEvent(const FillEvent& fillEvent);
 
 private:
     double capital;
