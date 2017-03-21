@@ -6,6 +6,10 @@
 HTTPDownloader::HTTPDownloader()
 {
     curl = curl_easy_init();
+    if (curl == nullptr)
+    {
+        throw std::runtime_error("Unable to create cURL object");
+    }
 }
 
 HTTPDownloader::~HTTPDownloader()
@@ -13,7 +17,8 @@ HTTPDownloader::~HTTPDownloader()
     curl_easy_cleanup(curl);
 }
 
-size_t HTTPDownloader::WriteData(const char *ptr, size_t size, size_t nmemb, void *stream) {
+size_t HTTPDownloader::WriteData(const char *ptr, size_t size, size_t nmemb, void *stream)
+{
     std::string data(ptr, size * nmemb);
     *(static_cast<std::ostringstream*>(stream)) << data;
     return size * nmemb;
@@ -30,10 +35,6 @@ std::string HTTPDownloader::Download(const std::string &url)
         if (curl_easy_perform(curl) != CURLE_OK) {
             throw std::runtime_error("Unable to download from website");
         }
-    }
-    else
-    {
-        throw std::runtime_error("Unable to create cURL object");
     }
     return out.str();
 }

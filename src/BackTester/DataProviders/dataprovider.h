@@ -26,9 +26,16 @@ public:
 
     void UpdateBars();
 
+    template<typename T>
+    void AssignMarketEventListener(T* listener)
+    {
+        QObject::connect(this, SIGNAL(PublishMarketEvent(const MarketEvent&)),
+                         listener, SLOT(ProcessMarketEvent(const MarketEvent&)));
+    }
+
     //Any class which needs market data can connect to this signal
 signals:
-    virtual void PublishMarketEvent(const MarketEvent&);
+    void PublishMarketEvent(const MarketEvent&);
 
 protected:
     std::vector<OHLCDataPoint> bars;

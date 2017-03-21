@@ -8,60 +8,6 @@
 #include <memory>
 #include <iostream>
 
-PortfolioHandler::PortfolioHandler(DataProvider *dataProvider, double initialCapital, int volumePerTransaction) :
-    capital(initialCapital),
-    volumePerTransaction(volumePerTransaction),
-    volumeInvested(0),
-    capitalInvested(0.0)
-{
-    QObject::connect(dataProvider, SIGNAL(PublishMarketEvent(const MarketEvent&)),
-                     this, SLOT(ProcessMarketEvent(const MarketEvent&)));
-}
-
-void PortfolioHandler::OrderRequest(const SignalEvent& signalEvent)
-{
-    if (signalEvent.GetSignalType() == Event::SignalType::LONG) {
-        double capitalToSpend = volumePerTransaction * signalEvent.GetPrice();
-        std::cout << "the amount strategy wants to spend is " << capitalToSpend << std::endl;
-        std::cout << "the amount of capital available is " << capital << std::endl;
-        if (capitalToSpend <= capital) {
-            // Just support market orders currently
-            /*eventQueue.AddEvent(std::make_unique<OrderEvent>(signalEvent->GetSymbol(),
-                                                             Event::OrderType::MKT,
-                                                             volumePerTransaction,
-                                                             signalEvent->GetPrice(),
-                                                             Event::Direction::BUY));*/
-        } else {
-            std::cout << "Portfolio is taking no long action" << std::endl;
-        }
-    } else if (signalEvent.GetSignalType() == Event::SignalType::SHORT){
-        // We are selling so will always do the transaction
-        /*eventQueue.AddEvent(std::make_unique<OrderEvent>(signalEvent->GetSymbol(),
-                                                         Event::OrderType::MKT,
-                                                         volumePerTransaction,
-                                                         signalEvent->GetPrice(),
-                                                         Event::Direction::SELL));*/
-    } else if (signalEvent.GetSignalType() == Event::SignalType::EXIT) {
-        if (volumeInvested > 0) {
-            /*eventQueue.AddEvent(std::make_unique<OrderEvent>(signalEvent->GetSymbol(),
-                                                             Event::OrderType::MKT,
-                                                             volumeInvested,
-                                                             signalEvent->GetPrice(),
-                                                             Event::Direction::SELL));*/
-        } else if (volumeInvested < 0) {
-            /*eventQueue.AddEvent(std::make_unique<OrderEvent>(signalEvent->GetSymbol(),
-                                                             Event::OrderType::MKT,
-                                                             volumeInvested,
-                                                             signalEvent->GetPrice(),
-                                                             Event::Direction::BUY));*/
-        } else {
-            std::cout << "Portfolio is taking no action as no volume invested" << std::endl;
-        }
-    } else {
-        std::cout << "Portfolio is taking no action" << std::endl;
-    }
-}
-
 void PortfolioHandler::FillUpdate(const FillEvent &fillEvent)
 {
     capital -= fillEvent.GetFillCost() + fillEvent.GetCommission();
@@ -84,4 +30,50 @@ void PortfolioHandler::ProcessMarketEvent(const MarketEvent& marketEvent)
               << "Capital Invested is now at: " << capitalInvested << "\n"
               << "Remaining capital is: " << capital << "\n"
               << "Total capital is " << capitalInvested + capital << std::endl;
+}
+
+void PortfolioHandler::ProcessBuySignalEvent(const SignalEvent &signalEvent)
+{
+    double capitalToSpend = volumePerTransaction * signalEvent.GetPrice();
+    std::cout << "the amount strategy wants to spend is " << capitalToSpend << std::endl;
+    std::cout << "the amount of capital available is " << capital << std::endl;
+    if (capitalToSpend <= capital) {
+        // Just support market orders currently
+        emit PublishOrderEvent({signalEvent.GetSymbol(),
+                               Event::OrderType::MKT,
+                               volumePerTransaction,
+                               signalEvent.GetPrice(),
+                               Event::Direction::BUY});
+    } else {
+        std::cout << "Portfolio is taking no long action" << std::endl;
+    }
+}
+
+void PortfolioHandler::ProcessSellSignalEvent(const SignalEvent &signalEvent)
+{
+    // We are selling so will always do the transaction
+    emit PublishOrderEvent({signalEvent.GetSymbol(),
+                           Event::OrderType::MKT,
+                           volumePerTransaction,
+                           signalEvent.GetPrice(),
+                           Event::Direction::SELL});
+}
+
+void PortfolioHandler::ProcessExitSignalEvent(const SignalEvent &signalEvent)
+{
+    if (volumeInvested > 0) {
+        emit PublishOrderEvent({signalEvent.GetSymbol(),
+                                Event::OrderType::MKT,
+                                volumeInvested,
+                                signalEvent.GetPrice(),
+                                Event::Direction::SELL});
+    } else if (volumeInvested < 0) {
+        emit PublishOrderEvent({signalEvent.GetSymbol(),
+                                Event::OrderType::MKT,
+                                volumeInvested,
+                                signalEvent.GetPrice(),
+                                Event::Direction::BUY});
+    } else {
+        std::cout << "Portfolio is taking no action as no volume invested" << std::endl;
+    }
 }

@@ -8,8 +8,7 @@ class DataProvider;
 class BuyAndHoldStrategy : public Strategy
 {
 public:
-    BuyAndHoldStrategy(DataProvider* dataProvider, PortfolioHandler* portfolio)
-        : Strategy(dataProvider, portfolio) {}
+    BuyAndHoldStrategy() = default;
 
     void ProcessMarketEvent(const MarketEvent& marketEvent) override;
 private:

@@ -10,14 +10,11 @@ class OrderEvent;
 class InteractiveBrokers : public Broker
 {
 public:
-    InteractiveBrokers(PortfolioHandler* portfolio) : portfolio(portfolio)
-    {}
+    InteractiveBrokers() = default;
 
-    void ExecuteOrder(const OrderEvent& event) override;
+    void ProcessOrderEvent(const OrderEvent& event) override;
 
 private:
-    PortfolioHandler* portfolio;
-
     double CalculateCommission(const OrderEvent &event) const;
 
     double CalculateExchangeFees(const OrderEvent& event) const;

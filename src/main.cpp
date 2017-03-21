@@ -28,19 +28,27 @@ std::unique_ptr<DataProvider> CreateDataProvider(DataSource dataSource,
     return dataProvider;
 }
 
+void AssignListeners(Broker* broker, PortfolioHandler* portfolio, DataProvider* dataProvider, Strategy* strategy)
+{
+    dataProvider->AssignMarketEventListener(portfolio);
+    dataProvider->AssignMarketEventListener(strategy);
+    strategy->AssignSignalEventListener(portfolio);
+    portfolio->AssignOrderEventListener(broker);
+    broker->AssignFillEventListener(portfolio);
+}
+
 int main(int argc, char *argv[])
 {
-    std::unique_ptr<DataProvider> dataProvider = CreateDataProvider(
-                DataSource::YAHOOCSVDATAPROVIDER,
-                "FDSA.L");
+    auto dataProvider = CreateDataProvider(DataSource::YAHOOCSVDATAPROVIDER, "FDSA.L");
     if (dataProvider == nullptr)
     {
         std::cerr << "Unable to continue as could not create data provider\n";
         exit(EXIT_FAILURE);
     }
-    PortfolioHandler portfolio(dataProvider.get());
-    std::unique_ptr<Strategy> strategy(std::make_unique<BuyAndHoldStrategy>(dataProvider.get(), &portfolio));
-    std::unique_ptr<Broker> broker(std::make_unique<InteractiveBrokers>(&portfolio));
+    PortfolioHandler portfolio;
+    std::unique_ptr<Strategy> strategy(std::make_unique<BuyAndHoldStrategy>());
+    std::unique_ptr<Broker> broker(std::make_unique<InteractiveBrokers>());
+    AssignListeners(broker.get(), &portfolio, dataProvider.get(), strategy.get());
     while (dataProvider->DataAvailable())
     {
         dataProvider->UpdateBars();
