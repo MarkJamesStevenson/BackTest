@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
     {
         dataProvider->UpdateBars();
         int milliseconds = 200;
-        std::cout << "sleeping for " << milliseconds << std::endl;
+        std::cout << "sleeping for " << milliseconds << " milliseconds" << std::endl;
         std::this_thread::sleep_for(std::chrono::milliseconds(milliseconds));
     }
 }

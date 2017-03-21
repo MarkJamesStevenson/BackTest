@@ -25,7 +25,7 @@ signals:
     void PublishFillEvent(const FillEvent&);
 
 public slots:
-    virtual void ProcessOrderEvent(const OrderEvent& signalEvent) = 0;
+    virtual void ProcessOrderEvent(const OrderEvent& orderEvent) = 0;
 };
 
 #endif // BROKER_H
