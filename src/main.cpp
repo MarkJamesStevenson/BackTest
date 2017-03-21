@@ -11,10 +11,9 @@
 #include "broker.h"
 #include "interactivebrokers.h"
 #include "dataproviderfactory.h"
-#include <QObject>
 
 std::unique_ptr<DataProvider> CreateDataProvider(DataSource dataSource,
-                                                 std::string symbol)
+                                                 const std::string& symbol)
 {
     std::unique_ptr<DataProvider> dataProvider = nullptr;
     try {
@@ -39,7 +38,7 @@ void AssignListeners(Broker* broker, PortfolioHandler* portfolio, DataProvider* 
 
 int main(int argc, char *argv[])
 {
-    auto dataProvider = CreateDataProvider(DataSource::YAHOOCSVDATAPROVIDER, "FDSA.L");
+    auto dataProvider = CreateDataProvider(DataSource::YAHOOCSVDATAPROVIDER, "RR.L");
     if (dataProvider == nullptr)
     {
         std::cerr << "Unable to continue as could not create data provider\n";
@@ -52,8 +51,9 @@ int main(int argc, char *argv[])
     while (dataProvider->DataAvailable())
     {
         dataProvider->UpdateBars();
-        std::cout << "sleeping for 0.2 seconds" << std::endl;
-        std::this_thread::sleep_for(std::chrono::milliseconds(5000));
+        int milliseconds = 200;
+        std::cout << "sleeping for " << milliseconds << std::endl;
+        std::this_thread::sleep_for(std::chrono::milliseconds(milliseconds));
     }
 }
 
