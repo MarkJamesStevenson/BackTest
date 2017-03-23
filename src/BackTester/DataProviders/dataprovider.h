@@ -17,10 +17,9 @@ public:
 
     virtual ~DataProvider() = default;
 
-    // This function should only be overriden
-    // by backtesting data providers to pre-download
-    // the required stock data before running.
-    virtual void Initialise(const std::string& symbol) {}
+    // This function should be used to connect to data source
+    // or retrieve any data required
+    virtual void Initialise(const std::string& symbol) = 0;
 
     bool DataAvailable() const;
 
