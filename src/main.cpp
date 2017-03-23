@@ -12,42 +12,29 @@
 #include "interactivebrokers.h"
 #include "dataproviderfactory.h"
 
-std::unique_ptr<DataProvider> CreateDataProvider(DataSource dataSource,
-                                                 const std::string& symbol)
-{
-    std::unique_ptr<DataProvider> dataProvider = nullptr;
-    try {
-        DataProviderFactory dataProviderFactory;
-        dataProvider = dataProviderFactory.CreateDataProvider(dataSource, symbol);
-    } catch (const std::exception& e) {
-        std::cerr << "Unable to continue as could not create data provider\n"
-                  << e.what() << "\n";
-        exit(EXIT_FAILURE);
-    }
-    return dataProvider;
-}
-
 void AssignListeners(Broker* broker, PortfolioHandler* portfolio, DataProvider* dataProvider, Strategy* strategy)
 {
     dataProvider->AssignMarketEventListener(portfolio);
     dataProvider->AssignMarketEventListener(strategy);
-    strategy->AssignSignalEventListener(portfolio);
-    portfolio->AssignOrderEventListener(broker);
     broker->AssignFillEventListener(portfolio);
 }
 
 int main(int argc, char *argv[])
 {
-    auto dataProvider = CreateDataProvider(DataSource::YAHOOCSVDATAPROVIDER, "RR.L");
-    if (dataProvider == nullptr)
-    {
-        std::cerr << "Unable to continue as could not create data provider\n";
+    std::unique_ptr<DataProvider> dataProvider = nullptr;
+    try {
+        DataProviderFactory dataProviderFactory;
+        dataProvider = dataProviderFactory.CreateDataProvider(DataSource::YAHOOCSVDATAPROVIDER, "FDSA.L");
+    } catch (const std::exception& e) {
+        std::cerr << "Unable to continue as could not create data provider\n"
+                  << e.what() << "\n";
         exit(EXIT_FAILURE);
     }
-    PortfolioHandler portfolio;
-    std::unique_ptr<Strategy> strategy(std::make_unique<BuyAndHoldStrategy>());
-    std::unique_ptr<Broker> broker(std::make_unique<InteractiveBrokers>());
-    AssignListeners(broker.get(), &portfolio, dataProvider.get(), strategy.get());
+    std::shared_ptr<Broker> broker(std::make_shared<InteractiveBrokers>());
+    std::shared_ptr<PortfolioHandler> portfolio(std::make_shared<PortfolioHandler>(broker));
+    std::unique_ptr<Strategy> strategy(std::make_unique<BuyAndHoldStrategy>(portfolio));
+
+    AssignListeners(broker.get(), portfolio.get(), dataProvider.get(), strategy.get());
     while (dataProvider->DataAvailable())
     {
         dataProvider->UpdateBars();
@@ -55,5 +42,6 @@ int main(int argc, char *argv[])
         std::cout << "sleeping for " << milliseconds << " milliseconds" << std::endl;
         std::this_thread::sleep_for(std::chrono::milliseconds(milliseconds));
     }
+    return 0;
 }
 

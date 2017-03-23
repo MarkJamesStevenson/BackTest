@@ -21,11 +21,10 @@ public:
                          listener, SLOT(ProcessFillEvent(const FillEvent&)));
     }
 
+    virtual void ProcessOrderEvent(const OrderEvent& orderEvent) = 0;
+
 signals:
     void PublishFillEvent(const FillEvent&);
-
-public slots:
-    virtual void ProcessOrderEvent(const OrderEvent& orderEvent) = 0;
 };
 
 #endif // BROKER_H

@@ -2,6 +2,8 @@
 #define PORTFOLIOHANDLER_H
 
 #include <QObject.h>
+#include <memory>
+#include "broker.h"
 
 class SignalEvent;
 class MarketEvent;
@@ -15,7 +17,10 @@ class PortfolioHandler : public QObject
 public:
     // Set up the portfolio with an initial capital and the volume of shares to
     // buy on each transaction, the initial capital is in GBX
-    PortfolioHandler::PortfolioHandler(double initialCapital = 1000000, int volumePerTransaction = 10) :
+    PortfolioHandler::PortfolioHandler(const std::shared_ptr<Broker> broker,
+                                       double initialCapital = 1000000,
+                                       int volumePerTransaction = 10) :
+        broker(broker),
         capital(initialCapital),
         volumePerTransaction(volumePerTransaction),
         volumeInvested(0),
@@ -31,18 +36,18 @@ public:
                          listener, SLOT(ProcessOrderEvent(const OrderEvent&)));
     }
 
-signals:
-    void PublishOrderEvent(const OrderEvent&);
+    void BuyOrderRequest(const SignalEvent& signalEvent);
+    void SellOrderRequest(const SignalEvent& signalEvent);
+    void ExitOrderRequest(const SignalEvent& signalEvent);
 
-    // Every heartbeat we need to update the current price of our holdings
 public slots:
+    // Every heartbeat we need to update the current price of our holdings
     void ProcessMarketEvent(const MarketEvent& marketEvent);
-    void ProcessBuySignalEvent(const SignalEvent& signalEvent);
-    void ProcessSellSignalEvent(const SignalEvent& signalEvent);
-    void ProcessExitSignalEvent(const SignalEvent& signalEvent);
+    // Receive updates from the broker if we get any fills
     void ProcessFillEvent(const FillEvent& fillEvent);
 
 private:
+    std::shared_ptr<Broker> broker;
     double capital;
     int volumePerTransaction;
     int volumeInvested;

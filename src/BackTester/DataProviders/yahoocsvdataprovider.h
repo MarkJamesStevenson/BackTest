@@ -4,11 +4,9 @@
 #include "dataprovider.h"
 #include <string>
 #include <vector>
-#include <QObject>
 
 class YahooCSVDataProvider : public DataProvider
 {
-    Q_OBJECT
 public:
     YahooCSVDataProvider() = default;
 

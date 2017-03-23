@@ -32,47 +32,47 @@ void PortfolioHandler::ProcessMarketEvent(const MarketEvent& marketEvent)
               << "Total capital is " << capitalInvested + capital << std::endl;
 }
 
-void PortfolioHandler::ProcessBuySignalEvent(const SignalEvent &signalEvent)
+void PortfolioHandler::BuyOrderRequest(const SignalEvent &signalEvent)
 {
     double capitalToSpend = volumePerTransaction * signalEvent.GetPrice();
     std::cout << "the amount strategy wants to spend is " << capitalToSpend << std::endl;
     std::cout << "the amount of capital available is " << capital << std::endl;
     if (capitalToSpend <= capital) {
         // Just support market orders currently
-        emit PublishOrderEvent({signalEvent.GetSymbol(),
-                               Event::OrderType::MKT,
-                               volumePerTransaction,
-                               signalEvent.GetPrice(),
-                               Event::Direction::BUY});
+        broker->ProcessOrderEvent({signalEvent.GetSymbol(),
+                                   Event::OrderType::MKT,
+                                   volumePerTransaction,
+                                   signalEvent.GetPrice(),
+                                   Event::Direction::BUY});
     } else {
         std::cout << "Portfolio is taking no long action" << std::endl;
     }
 }
 
-void PortfolioHandler::ProcessSellSignalEvent(const SignalEvent &signalEvent)
+void PortfolioHandler::SellOrderRequest(const SignalEvent &signalEvent)
 {
     // We are selling so will always do the transaction
-    emit PublishOrderEvent({signalEvent.GetSymbol(),
-                           Event::OrderType::MKT,
-                           volumePerTransaction,
-                           signalEvent.GetPrice(),
-                           Event::Direction::SELL});
+    broker->ProcessOrderEvent({signalEvent.GetSymbol(),
+                               Event::OrderType::MKT,
+                               volumePerTransaction,
+                               signalEvent.GetPrice(),
+                               Event::Direction::SELL});
 }
 
-void PortfolioHandler::ProcessExitSignalEvent(const SignalEvent &signalEvent)
+void PortfolioHandler::ExitOrderRequest(const SignalEvent &signalEvent)
 {
     if (volumeInvested > 0) {
-        emit PublishOrderEvent({signalEvent.GetSymbol(),
-                                Event::OrderType::MKT,
-                                volumeInvested,
-                                signalEvent.GetPrice(),
-                                Event::Direction::SELL});
+        broker->ProcessOrderEvent({signalEvent.GetSymbol(),
+                                   Event::OrderType::MKT,
+                                   volumeInvested,
+                                   signalEvent.GetPrice(),
+                                   Event::Direction::SELL});
     } else if (volumeInvested < 0) {
-        emit PublishOrderEvent({signalEvent.GetSymbol(),
-                                Event::OrderType::MKT,
-                                volumeInvested,
-                                signalEvent.GetPrice(),
-                                Event::Direction::BUY});
+        broker->ProcessOrderEvent({signalEvent.GetSymbol(),
+                                   Event::OrderType::MKT,
+                                   volumeInvested,
+                                   signalEvent.GetPrice(),
+                                   Event::Direction::BUY});
     } else {
         std::cout << "Portfolio is taking no action as no volume invested" << std::endl;
     }
