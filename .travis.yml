@@ -29,11 +29,6 @@ install:
   - if [ "$CXX" = "g++" ]; then 
       export CXX="g++-6";
     fi
-
-  ########################################################
-  # install Qt files
-  ########################################################
-  install:
   - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
          sudo apt-add-repository -y ppa:beineri/opt-qt541
       && sudo apt-get -qq update
