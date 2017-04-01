@@ -10,27 +10,26 @@ matrix:
         apt:
           packages:
             - g++-6
+            - cmake
+            - cmake-data
           sources:
             - ubuntu-toolchain-r-test
+            - george-edison55-precise-backports
     - os: osx
       compiler: clang
+      addons:
+        apt:
+          packages:
+            - cmake
+            - cmake-data
+          sources:
+            - george-edison55-precise-backports
 
 install:
   - if [ "$CXX" = "g++" ]; then 
       export CXX="g++-6";
     fi
 
-  ############################################################################
-  # Install a recent CMake
-  ############################################################################
-  - |
-    if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
-      CMAKE_URL="https://cmake.org/files/v3.7/cmake-3.7.2-Linux-x86_64.tar.gz"
-      mkdir cmake && travis_retry wget --no-check-certificate --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake
-      export PATH=${DEPS_DIR}/cmake/bin:${PATH}
-    else
-      brew upgrade cmake || brew install cmake
-    fi
   - cmake --version
 
 before_script:
