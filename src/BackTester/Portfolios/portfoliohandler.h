@@ -17,9 +17,9 @@ class PortfolioHandler : public QObject
 public:
     // Set up the portfolio with an initial capital and the volume of shares to
     // buy on each transaction, the initial capital is in GBX
-    PortfolioHandler::PortfolioHandler(const std::shared_ptr<Broker> broker,
-                                       double initialCapital = 1000000,
-                                       int volumePerTransaction = 10) :
+    PortfolioHandler(const std::shared_ptr<Broker> broker,
+                     double initialCapital = 1000000,
+                     int volumePerTransaction = 10) :
         broker(broker),
         capital(initialCapital),
         volumePerTransaction(volumePerTransaction),
