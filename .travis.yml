@@ -13,9 +13,6 @@ matrix:
             - g++-6
             - cmake
             - cmake-data
-          sources:
-            - ubuntu-toolchain-r-test
-            - george-edison55-precise-backports
             
 before_install:
   - if [ "$QT_BASE" = "56" ]; then sudo add-apt-repository ppa:beineri/opt-qt562-trusty -y; fi
@@ -28,7 +25,10 @@ install:
   - if [ "$CXX" = "g++" ]; then 
       export CXX="g++-6";
     fi
-  - if [ "$QT_BASE" = "56" ]; then sudo apt-get install -qq qt56base; source /opt/qt56/bin/qt56-env.sh; fi
+  - if [ "$QT_BASE" = "56" ]; then 
+      sudo apt-get install -qq qt56base;
+    fi      
+  - source /opt/qt56/bin/qt56-env.sh;
 
 before_script:
   - mkdir build
