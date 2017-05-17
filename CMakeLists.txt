@@ -23,6 +23,7 @@ endif(CURL_FOUND)
 
 set(CMAKE_AUTOMOC ON)
 
+set(CMAKE_PREFIX_PATH "/usr/local/opt/qt5")
 find_package(Qt5Widgets)
 
 # Prevent GoogleTest from overriding our compiler/linker options
@@ -45,12 +46,12 @@ endif()
 
 # Now simply link your own targets against gtest, gmock,
 # etc. as appropriate
-file(GLOB_RECURSE sources      src/BackTester/Brokers/*.cpp src/BackTester/Brokers/*.h
+file(GLOB_RECURSE sources      src/BackTester/Brokers/*.cpp       src/BackTester/Brokers/*.h
                                src/BackTester/DataProviders/*.cpp src/BackTester/DataProviders/*.h
-                               src/BackTester/Strategies/*.cpp src/BackTester/Strategies/*.h
-                               src/BackTester/Utilities/*.cpp src/BackTester/Utilities/*.h
-                               src/BackTester/Events/*.cpp src/BackTester/Events/*.h
-                               src/BackTester/Portfolios/*.cpp src/BackTester/Portfolios/*.h)
+                               src/BackTester/Strategies/*.cpp    src/BackTester/Strategies/*.h
+                               src/BackTester/Utilities/*.cpp     src/BackTester/Utilities/*.h
+                               src/BackTester/Events/*.cpp        src/BackTester/Events/*.h
+                               src/BackTester/Portfolios/*.cpp    src/BackTester/Portfolios/*.h)
 file(GLOB_RECURSE sources_test src/test/*.cpp)
 
 add_library (BackTester ${sources})
