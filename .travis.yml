@@ -17,16 +17,16 @@ matrix:
             - ubuntu-toolchain-r-test
             
     - os: osx
-          compiler: clang
-          env:
-            - QT_BASE=57
-          addons:
-            apt:
-              packages:
-                - cmake
-                - cmake-data
-              sources:
-                - george-edison55-precise-backports
+      compiler: clang
+      env:
+        - QT_BASE=57
+      addons:
+        apt:
+          packages:
+            - cmake
+            - cmake-data
+          sources:
+            - george-edison55-precise-backports
             
 before_install:
   - if [ "$QT_BASE" = "56" ]; then sudo add-apt-repository ppa:beineri/opt-qt562-trusty -y; fi
