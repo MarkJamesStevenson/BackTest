@@ -1,7 +1,7 @@
 #ifndef STRATEGY_H
 #define STRATEGY_H
 
-#include <QObject>
+#include <QApplication>
 #include <memory>
 
 class MarketEvent;

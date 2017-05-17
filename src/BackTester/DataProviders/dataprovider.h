@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 #include "ohlcdatapoint.h"
-#include <QApplication.h>
+#include <QApplication>
 
 class MarketEvent;
 class EventQueue;
