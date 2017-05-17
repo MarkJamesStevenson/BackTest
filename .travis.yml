@@ -28,11 +28,9 @@ install:
       export CXX="g++-6";
     fi
   - if [ "$QT_BASE" = "56" ]; then 
-      sudo apt-get install -qq qt56base;
-    fi      
-  - source /opt/qt56/bin/qt56-env.sh;
-  - QTDIR="/opt/qt56"
-  - PATH="$QTDIR/bin:$PATH"
+      sudo apt-get install -qq qt56base &&
+      source /opt/qt56/bin/qt56-env.sh;
+    fi
 
 before_script:
   - mkdir build
