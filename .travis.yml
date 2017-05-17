@@ -32,6 +32,7 @@ install:
   - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
          sudo apt-add-repository -y ppa:beineri/opt-qt562 -y
       && sudo apt-get -qq update
+      && sudo apt-get install -qq qt5-dev-tools
       && sudo apt-get install mesa-common-dev qt56base qt56quickcontrols qt56serialport -y
       && export PRE_PATH=/opt/qt56
       ;
