@@ -1,7 +1,7 @@
 #ifndef BROKER_H
 #define BROKER_H
 
-#include <QObject>
+#include <QApplication>
 
 class OrderEvent;
 class FillEvent;

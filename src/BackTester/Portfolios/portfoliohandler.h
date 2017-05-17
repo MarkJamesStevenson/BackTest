@@ -1,7 +1,7 @@
 #ifndef PORTFOLIOHANDLER_H
 #define PORTFOLIOHANDLER_H
 
-#include <QObject.h>
+#include <qapplication.h>
 #include <memory>
 #include "broker.h"
 
