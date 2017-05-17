@@ -13,6 +13,8 @@ matrix:
             - g++-6
             - cmake
             - cmake-data
+          sources:
+            - ubuntu-toolchain-r-test
             
 before_install:
   - if [ "$QT_BASE" = "56" ]; then sudo add-apt-repository ppa:beineri/opt-qt562-trusty -y; fi
