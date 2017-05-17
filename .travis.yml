@@ -16,8 +16,21 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
             
+    - os: osx
+          compiler: clang
+          env:
+            - QT_BASE=57
+          addons:
+            apt:
+              packages:
+                - cmake
+                - cmake-data
+              sources:
+                - george-edison55-precise-backports
+            
 before_install:
   - if [ "$QT_BASE" = "56" ]; then sudo add-apt-repository ppa:beineri/opt-qt562-trusty -y; fi
+  - if [[ "$QT_BASE" = "57" && "$TRAVIS_OS_NAME" = "linux" ]]; then sudo add-apt-repository ppa:beineri/opt-qt571-trusty -y; fi
   - if [ "$TRAVIS_OS_NAME" = "linux" ]; then 
       sudo apt-get update -qq;
     else
@@ -30,6 +43,14 @@ install:
   - if [ "$QT_BASE" = "56" ]; then 
       sudo apt-get install -qq qt56base &&
       source /opt/qt56/bin/qt56-env.sh;
+    fi
+  - if [ "$QT_BASE" = "57" ]; then
+      if [ "$TRAVIS_OS_NAME" = "linux" ]; then 
+        sudo apt-get install -qq qt57base; source /opt/qt57/bin/qt57-env.sh; 
+      else
+        brew install qt5;
+        brew link --force qt5;
+      fi
     fi
 
 before_script:
