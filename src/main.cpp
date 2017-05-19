@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
     std::unique_ptr<DataProvider> dataProvider = nullptr;
     try {
         DataProviderFactory dataProviderFactory;
-        dataProvider = dataProviderFactory.CreateDataProvider(DataSource::YAHOOCSVDATAPROVIDER, "FDSA.L");
+        dataProvider = dataProviderFactory.CreateDataProvider(DataSource::YAHOOCSVFILEDATAPROVIDER, "MSFT.csv");
     } catch (const std::exception& e) {
         std::cerr << "Unable to continue as could not create data provider\n"
                   << e.what() << "\n";
@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
     while (dataProvider->DataAvailable())
     {
         dataProvider->UpdateBars();
-        int milliseconds = 200;
+        int milliseconds = 10;
         std::cout << "sleeping for " << milliseconds << " milliseconds" << std::endl;
         std::this_thread::sleep_for(std::chrono::milliseconds(milliseconds));
     }

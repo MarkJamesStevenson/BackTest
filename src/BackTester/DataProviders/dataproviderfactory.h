@@ -6,7 +6,8 @@
 #include "dataprovider.h"
 
 enum class DataSource {
-    YAHOOCSVDATAPROVIDER
+    YAHOOCSVDATAPROVIDER,
+    YAHOOCSVFILEDATAPROVIDER
 };
 
 class DataProviderFactory
