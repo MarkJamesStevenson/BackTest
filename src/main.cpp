@@ -11,6 +11,8 @@
 #include "broker.h"
 #include "interactivebrokers.h"
 #include "dataproviderfactory.h"
+#include "mainwindow.h"
+#include <QApplication>
 
 void AssignListeners(Broker* broker, PortfolioHandler* portfolio, DataProvider* dataProvider, Strategy* strategy)
 {
@@ -21,6 +23,10 @@ void AssignListeners(Broker* broker, PortfolioHandler* portfolio, DataProvider* 
 
 int main(int argc, char *argv[])
 {
+    QApplication app(argc, argv);
+    MainWindow window;
+    window.show();
+    app.exec();
     std::unique_ptr<DataProvider> dataProvider = nullptr;
     try {
         DataProviderFactory dataProviderFactory;
