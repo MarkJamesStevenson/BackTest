@@ -15,7 +15,6 @@ class EventLoop : public QObject
 public:
     EventLoop() = default;
 
-public slots:
     void Run(QMainWindow* ui) const;
 
 private:
