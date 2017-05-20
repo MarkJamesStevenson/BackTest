@@ -8,8 +8,8 @@ struct OHLCDataPoint {
         : symbol(symbol), date(date), open(open), high(high), low(low), close(close), volume(volume), adjClose(adjClose)
     {}
 
-    const std::string symbol;
-    const std::string date;
+    std::string symbol;
+    std::string date;
     double open;
     double high;
     double low;
