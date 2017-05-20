@@ -17,6 +17,12 @@ public:
         dataPoint(data)
     {}
 
+    double GetOpenPrice() const { return dataPoint.open; }
+
+    double GetHighPrice() const { return dataPoint.high; }
+
+    double GetLowPrice() const { return dataPoint.low; }
+
     double GetClosePrice() const { return dataPoint.close; }
 
     std::string GetDate() const { return dataPoint.date; }

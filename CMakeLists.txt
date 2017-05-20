@@ -54,7 +54,8 @@ file(GLOB_RECURSE sources      src/BackTester/Brokers/*.cpp       src/BackTester
                                src/BackTester/Strategies/*.cpp    src/BackTester/Strategies/*.h
                                src/BackTester/Utilities/*.cpp     src/BackTester/Utilities/*.h
                                src/BackTester/Events/*.cpp        src/BackTester/Events/*.h
-                               src/BackTester/Portfolios/*.cpp    src/BackTester/Portfolios/*.h)
+                               src/BackTester/Portfolios/*.cpp    src/BackTester/Portfolios/*.h
+                               src/BackTester/*.cpp               src/BackTester/*.h)
 
 file(GLOB_RECURSE sources_test src/test/*.cpp)
 
@@ -64,7 +65,8 @@ include_directories(src/BackTester/Brokers
                     src/BackTester/Strategies
                     src/BackTester/Utilities
                     src/BackTester/Events
-                    src/BackTester/Portfolios)
+                    src/BackTester/Portfolios
+                    src/BackTester)
 target_link_libraries(BackTester Qt5::Widgets)
 
 set(GUI_UI_FILES src/Gui/mainwindow.ui)
