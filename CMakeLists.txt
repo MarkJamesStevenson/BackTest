@@ -2,6 +2,7 @@ project(BackTest)
 cmake_minimum_required(VERSION 2.8.11)
 set (CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+# set(CMAKE_CXX_FLAGS "-Wall")
 
 # Download and unpack googletest at configure time
 configure_file(CMakeLists.txt.in.txt
@@ -72,12 +73,12 @@ target_link_libraries(BackTester Qt5::Widgets)
 set(GUI_UI_FILES src/Gui/mainwindow.ui)
 
 set(Q_CUSTOM_PLOT_FILES src/Gui/External/qcustomplot.h src/Gui/External/qcustomplot.cpp)
-add_library(mainwindow src/Gui/mainwindow.cpp src/Gui/mainwindow.h ${GUI_UI_FILES} ${Q_CUSTOM_PLOT_FILES})
+add_library(Gui src/Gui/mainwindow.cpp src/Gui/mainwindow.h ${GUI_UI_FILES} ${Q_CUSTOM_PLOT_FILES})
 INCLUDE_DIRECTORIES(src/Gui src/Gui/External)
-target_link_libraries (mainwindow Qt5::Widgets Qt5::PrintSupport)
+target_link_libraries (Gui Qt5::Widgets Qt5::PrintSupport)
 
 add_executable(${PROJECT_NAME} src/main.cpp )
-target_link_libraries(${PROJECT_NAME} BackTester ${CURL_LIBRARIES} mainwindow Qt5::Widgets)
+target_link_libraries(${PROJECT_NAME} Gui BackTester ${CURL_LIBRARIES} Qt5::Widgets)
 
 add_executable(test_runner ${sources_test})
 target_link_libraries(test_runner gtest_main BackTester ${CURL_LIBRARIES} Qt5::Widgets )
