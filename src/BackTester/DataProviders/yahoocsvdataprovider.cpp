@@ -54,7 +54,7 @@ void YahooCSVDataProvider::PopulateBars(const std::string& symbol, const std::st
             {
                 throw std::range_error(std::string("Vector should be of size 7. Received: " + std::to_string(data.size())));
             }
-            std::string date = data[0];
+            QDateTime date = StringUtils::ConvertStringToQDateTimeFormat(data[0]);
             double open = std::stod(data[1]);
             double high = std::stod(data[2]);
             double low = std::stod(data[3]);

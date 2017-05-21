@@ -4,6 +4,7 @@
 #include "event.h"
 #include "ohlcdatapoint.h"
 #include <iosfwd>
+#include <QDateTime>
 
 /*
  * Creates the market event when new market data has
@@ -25,7 +26,7 @@ public:
 
     double GetClosePrice() const { return dataPoint.adjClose; }
 
-    std::string GetDate() const { return dataPoint.date; }
+    QDateTime GetDate() const { return dataPoint.date; }
 
     std::string GetSymbol() const { return dataPoint.symbol; }
 

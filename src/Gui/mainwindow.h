@@ -29,10 +29,8 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    QDateTime start;
     EventLoop eventLoop;
     QCPFinancial *candlesticks;
-    double binSize = 3600*24; // bin data in 1 day intervals
 };
 
 #endif // MAINWINDOW_H

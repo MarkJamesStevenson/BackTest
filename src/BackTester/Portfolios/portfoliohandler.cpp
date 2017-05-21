@@ -25,7 +25,7 @@ void PortfolioHandler::ProcessMarketEvent(const MarketEvent& marketEvent)
     // We presume the current price is the close price
     double closePrice = marketEvent.GetClosePrice();
     capitalInvested = closePrice * volumeInvested;
-    std::cout << "Date: " << marketEvent.GetDate() << "\n"
+    std::cout << "Date: " << marketEvent.GetDate().toString("dd MMMM yyyy").toStdString() << "\n"
               << "Share price is: " << marketEvent.GetClosePrice() << "\n"
               << "Capital Invested is now at: " << capitalInvested << "\n"
               << "Remaining capital is: " << capital << "\n"

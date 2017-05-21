@@ -19,18 +19,18 @@ MainWindow::MainWindow(QWidget *parent) :
 void MainWindow::setupCandleStickGraph(QCustomPlot *customPlot)
 {
   customPlot->legend->setVisible(true);
-  start = QDateTime(QDate(2014, 6, 11));
 
   // create candlestick chart:
   candlesticks = new QCPFinancial(customPlot->xAxis, customPlot->yAxis);
   candlesticks->setName("Candlestick");
   candlesticks->setChartStyle(QCPFinancial::csCandlestick);
+  double binSize = 3600*24; // bin data in 1 day intervals
   candlesticks->setWidth(binSize*0.9);
   candlesticks->setTwoColored(true);
   candlesticks->setBrushPositive(QColor(100, 180, 110));
   candlesticks->setBrushNegative(QColor(180, 90, 90));
-  //candlesticks->setPenPositive(QPen(QColor(0, 0, 0)));
-  //candlesticks->setPenNegative(QPen(QColor(0, 0, 0)));
+  candlesticks->setPenPositive(QPen(QColor(0, 0, 0)));
+  candlesticks->setPenNegative(QPen(QColor(0, 0, 0)));
 
   // configure axes of both main and bottom axis rect:
   QSharedPointer<QCPAxisTickerDateTime> dateTimeTicker(new QCPAxisTickerDateTime);
@@ -47,11 +47,7 @@ void MainWindow::setupCandleStickGraph(QCustomPlot *customPlot)
 
 void MainWindow::ProcessMarketEvent(const MarketEvent &marketEvent)
 {
-    std::cout << marketEvent.GetDate() << std::endl;
-    static int i = 1;
-    double time = start.toTime_t() + 3600 * 24 * i;
-    i++;
-    candlesticks->addData(time,
+    candlesticks->addData(marketEvent.GetDate().toTime_t(),
                           marketEvent.GetOpenPrice(),
                           marketEvent.GetHighPrice(),
                           marketEvent.GetLowPrice(),
