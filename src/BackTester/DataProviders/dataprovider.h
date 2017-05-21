@@ -21,9 +21,13 @@ public:
     // or retrieve any data required
     virtual void Initialise(const std::string& symbol) = 0;
 
-    bool DataAvailable() const;
+    // This must be overridden and return true if there is
+    // any more market data to be processed
+    virtual bool DataAvailable() const = 0;
 
-    void UpdateBars();
+    // This must be overridden and it should emit a
+    // PublishMarketEvent(const MarketEvent&).
+    virtual void UpdateBars() = 0;
 
     template<typename T>
     void AssignMarketEventListener(T* listener)
@@ -35,9 +39,6 @@ public:
     //Any class which needs market data can connect to this signal
 signals:
     void PublishMarketEvent(const MarketEvent&);
-
-protected:
-    std::vector<OHLCDataPoint> bars;
 };
 
 #endif // DATAPROVIDER_H

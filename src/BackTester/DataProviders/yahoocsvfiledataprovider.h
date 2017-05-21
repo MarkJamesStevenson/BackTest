@@ -3,7 +3,7 @@
 
 #include "dataprovider.h"
 #include <string>
-#include <vector>
+#include <queue>
 
 class YahooCSVFileDataProvider : public DataProvider
 {
@@ -12,8 +12,14 @@ public:
 
     void Initialise(const std::string& symbol) override;
 
+    void UpdateBars() override;
+
+    bool DataAvailable() const override;
+
 private:
     void PopulateBars(std::istream &is, const std::string &symbol);
+
+    std::queue<OHLCDataPoint> bars;
 };
 
 #endif // YAHOOCSVFILEDATAPROVIDER_H

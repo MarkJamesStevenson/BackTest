@@ -5,6 +5,8 @@
 #include <vector>
 #include "stringutils.h"
 #include <exception>
+#include <cassert>
+#include "marketevent.h"
 
 void YahooCSVFileDataProvider::Initialise(const std::string &directory)
 {
@@ -21,6 +23,18 @@ void YahooCSVFileDataProvider::Initialise(const std::string &directory)
         std::string error = "Could not open file: " + directory;
         throw std::runtime_error(error);
     }
+}
+
+void YahooCSVFileDataProvider::UpdateBars()
+{
+    assert(DataAvailable() && "Should not call without checking it has data");
+    emit PublishMarketEvent(MarketEvent(bars.front()));
+    bars.pop();
+}
+
+bool YahooCSVFileDataProvider::DataAvailable() const
+{
+    return !bars.empty();
 }
 
 void YahooCSVFileDataProvider::PopulateBars(std::istream& is, const std::string& symbol)
@@ -49,7 +63,7 @@ void YahooCSVFileDataProvider::PopulateBars(std::istream& is, const std::string&
             double close = std::stod(data[4]);
             double adjClose = std::stod(data[6]);
             double volume = std::stod(data[5]);
-            bars.emplace_back(symbol, date, open, high, low, close, adjClose, volume);
+            bars.push(OHLCDataPoint(symbol, date, open, high, low, close, adjClose, volume));
         }
     }
 }

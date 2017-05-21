@@ -32,8 +32,13 @@ public:
 
     void Initialise(const std::string& symbol) override;
 
+    bool DataAvailable() const override;
+
+    void UpdateBars() override;
 private:
     void PopulateBars(const std::string &symbol, const std::string& stockData);
+
+    std::vector<OHLCDataPoint> bars;
 };
 
 std::string ConstructUrl(const std::string& symbol,

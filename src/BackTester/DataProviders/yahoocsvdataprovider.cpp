@@ -8,6 +8,8 @@
 #include "ohlcdatapoint.h"
 #include "stringutils.h"
 #include <exception>
+#include <cassert>
+#include "marketevent.h"
 
 void YahooCSVDataProvider::Initialise(const std::string &symbol)
 {
@@ -19,6 +21,18 @@ void YahooCSVDataProvider::Initialise(const std::string &symbol)
     HTTPDownloader downloader;
     std::string stockData = downloader.Download(url);
     PopulateBars(symbol, stockData);
+}
+
+void YahooCSVDataProvider::UpdateBars()
+{
+    assert(DataAvailable() && "Should not call without checking it has data");
+    emit PublishMarketEvent(MarketEvent(bars.back()));
+    bars.pop_back();
+}
+
+bool YahooCSVDataProvider::DataAvailable() const
+{
+    return !bars.empty();
 }
 
 void YahooCSVDataProvider::PopulateBars(const std::string& symbol, const std::string &stockData)
