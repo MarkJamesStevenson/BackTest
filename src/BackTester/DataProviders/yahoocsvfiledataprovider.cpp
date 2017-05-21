@@ -37,19 +37,19 @@ void YahooCSVFileDataProvider::PopulateBars(std::istream& is, const std::string&
         }
         else
         {
-            const std::vector<std::string> data = StringUtils::Split(line);
+            std::vector<std::string> data = StringUtils::Split(line);
             if (data.size() != 7)
             {
                 throw std::range_error(std::string("Vector should be of size 7. Received: " + std::to_string(data.size())));
             }
-            const std::string date = data[0];
+            std::string date = data[0];
             double open = std::stod(data[1]);
             double high = std::stod(data[2]);
             double low = std::stod(data[3]);
             double close = std::stod(data[4]);
-            double volume = std::stod(data[5]);
             double adjClose = std::stod(data[6]);
-            bars.emplace_back(symbol, date, open, high, low, close, volume, adjClose);
+            double volume = std::stod(data[5]);
+            bars.emplace_back(symbol, date, open, high, low, close, adjClose, volume);
         }
     }
 }

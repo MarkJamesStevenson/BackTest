@@ -41,7 +41,7 @@ void EventLoop::Run(QMainWindow *ui) const
     while (dataProvider->DataAvailable())
     {
         dataProvider->UpdateBars();
-        int milliseconds = 3000;
+        int milliseconds = 300;
         std::cout << "sleeping for " << milliseconds << " milliseconds" << std::endl;
         std::this_thread::sleep_for(std::chrono::milliseconds(milliseconds));
     }

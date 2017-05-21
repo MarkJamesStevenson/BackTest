@@ -23,7 +23,7 @@ public:
 
     double GetLowPrice() const { return dataPoint.low; }
 
-    double GetClosePrice() const { return dataPoint.close; }
+    double GetClosePrice() const { return dataPoint.adjClose; }
 
     std::string GetDate() const { return dataPoint.date; }
 

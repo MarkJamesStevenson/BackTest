@@ -10,26 +10,6 @@ class YahooCSVFileDataProvider : public DataProvider
 public:
     YahooCSVFileDataProvider() = default;
 
-    enum class Month {
-        JANUARY = 0,
-        FEBRUARY,
-        MARCH,
-        APRIL,
-        MAY,
-        JUNE,
-        JULY,
-        AUGUST,
-        SEPTEMBER,
-        OCTOBER,
-        NOVEMBER,
-        DECEMBER
-    };
-
-    enum class TradingPeriod {
-        DAY = 'd',
-        MONTH = 'm'
-    };
-
     void Initialise(const std::string& symbol) override;
 
 private:
