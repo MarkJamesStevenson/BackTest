@@ -9,20 +9,19 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    setWindowState(Qt::WindowMaximized);
     setupCandleStickGraph(ui->customPlot);
-    setWindowTitle("QCustomPlot: ");
+    setWindowTitle("BackTest");
     statusBar()->clearMessage();
-    ui->customPlot->replot();
     connect(ui->startEventLoop, SIGNAL (released()), this, SLOT (Run()));
 }
 
 void MainWindow::setupCandleStickGraph(QCustomPlot *customPlot)
 {
   customPlot->legend->setVisible(true);
-
   // create candlestick chart:
   candlesticks = new QCPFinancial(customPlot->xAxis, customPlot->yAxis);
-  candlesticks->setName("Candlestick");
+  //candlesticks->setName("Candlestick");
   candlesticks->setChartStyle(QCPFinancial::csCandlestick);
   double binSize = 3600*24; // bin data in 1 day intervals
   candlesticks->setWidth(binSize*0.9);
@@ -47,6 +46,7 @@ void MainWindow::setupCandleStickGraph(QCustomPlot *customPlot)
 
 void MainWindow::ProcessMarketEvent(const MarketEvent &marketEvent)
 {
+    candlesticks->setName(QString::fromStdString(marketEvent.GetSymbol()));
     candlesticks->addData(marketEvent.GetDate().toTime_t(),
                           marketEvent.GetOpenPrice(),
                           marketEvent.GetHighPrice(),
