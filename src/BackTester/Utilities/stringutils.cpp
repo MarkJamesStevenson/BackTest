@@ -5,6 +5,7 @@
 #include <vector>
 #include <QDateTime>
 #include <iostream>
+#include <exception>
 
 namespace StringUtils
 {
@@ -38,7 +39,8 @@ namespace StringUtils
         }
         else
         {
-            throw std::runtime_error(std::string("Input date was not of the expected form DD-MM-YYYY: " + inputString));
+            std::string error = "Input date was not of the expected form YYYY-MM-DD: " + inputString;
+            throw std::runtime_error(error);
         }
     }
 }
