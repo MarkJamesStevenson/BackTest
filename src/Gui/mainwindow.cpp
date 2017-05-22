@@ -19,9 +19,8 @@ MainWindow::MainWindow(QWidget *parent) :
 void MainWindow::setupCandleStickGraph(QCustomPlot *customPlot)
 {
   customPlot->legend->setVisible(true);
-  // create candlestick chart:
+
   candlesticks = new QCPFinancial(customPlot->xAxis, customPlot->yAxis);
-  //candlesticks->setName("Candlestick");
   candlesticks->setChartStyle(QCPFinancial::csCandlestick);
   double binSize = 3600*24; // bin data in 1 day intervals
   candlesticks->setWidth(binSize*0.9);
@@ -34,7 +33,7 @@ void MainWindow::setupCandleStickGraph(QCustomPlot *customPlot)
   // configure axes of both main and bottom axis rect:
   QSharedPointer<QCPAxisTickerDateTime> dateTimeTicker(new QCPAxisTickerDateTime);
   dateTimeTicker->setDateTimeSpec(Qt::UTC);
-  dateTimeTicker->setDateTimeFormat("dd. MMMM yyyy");
+  dateTimeTicker->setDateTimeFormat("dd MMMM yy");
   customPlot->xAxis->setTicker(dateTimeTicker);
   customPlot->rescaleAxes();
   customPlot->xAxis->scaleRange(1.025, customPlot->xAxis->range().center());
