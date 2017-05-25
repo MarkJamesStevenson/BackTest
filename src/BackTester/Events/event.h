@@ -37,7 +37,7 @@ public:
         EXIT
     };
 
-private:
+protected:
     EventType event;
 };
 

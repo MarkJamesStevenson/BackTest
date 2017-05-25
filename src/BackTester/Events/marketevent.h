@@ -5,18 +5,26 @@
 #include "ohlcdatapoint.h"
 #include <iosfwd>
 #include <QDateTime>
+#include <QMetaType>
 
 /*
  * Creates the market event when new market data has
  * been received
  */
-class MarketEvent : public Event
+class MarketEvent
 {
 public:
+    MarketEvent() : dataPoint("",QDateTime(),0,0,0,0,0,0)
+    {}
+
     MarketEvent(const OHLCDataPoint& data) :
-        Event(Event::EventType::MARKET_EVENT),
         dataPoint(data)
     {}
+
+    MarketEvent(const MarketEvent& event) : dataPoint(event.dataPoint)
+    {}
+
+    ~MarketEvent() = default;
 
     double GetOpenPrice() const { return dataPoint.open; }
 
@@ -34,6 +42,7 @@ public:
 private:
     OHLCDataPoint dataPoint;
 };
+Q_DECLARE_METATYPE(MarketEvent);
 
 std::ostream& operator<<(std::ostream& os, const MarketEvent& event);
 

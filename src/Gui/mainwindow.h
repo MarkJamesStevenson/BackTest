@@ -5,6 +5,7 @@
 #include "qcustomplot.h"
 #include "eventloop.h"
 
+class ErrorMessage;
 class MarketEvent;
 
 namespace Ui {
@@ -21,16 +22,23 @@ public:
 
     void setupCandleStickGraph(QCustomPlot *customPlot);
 
+signals:
+    void RunLoop();
+    void ErrorMessage(const std::string& error);
+
 public slots:
     void ProcessMarketEvent(const MarketEvent& marketEvent);
+
 
 private slots:
     void Run();
 
 private:
     Ui::MainWindow *ui;
-    EventLoop eventLoop;
     QCPFinancial *candlesticks;
+    QErrorMessage* errorMessage;
+
+    void AssignListeners(Broker *broker, PortfolioHandler *portfolio, DataProvider *dataProvider, Strategy *strategy) const;
 };
 
 #endif // MAINWINDOW_H
