@@ -36,6 +36,7 @@ private slots:
 private:
     Ui::MainWindow *ui;
     QCPFinancial *candlesticks;
+    QThread* workerThread;
     QErrorMessage* errorMessage;
 
     void AssignListeners(Broker *broker, PortfolioHandler *portfolio, DataProvider *dataProvider, Strategy *strategy) const;

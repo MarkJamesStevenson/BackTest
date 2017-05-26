@@ -13,14 +13,16 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow),
+    workerThread(new QThread(this)),
+    errorMessage(new QErrorMessage(this))
 {
     ui->setupUi(this);
     setWindowState(Qt::WindowMaximized);
     setupCandleStickGraph(ui->customPlot);
     setWindowTitle("BackTest");
     statusBar()->clearMessage();
-    errorMessage = new QErrorMessage(this);
+
     connect(ui->startEventLoop, &QPushButton::released, [=] () {
         Run();
     });
@@ -57,21 +59,25 @@ void MainWindow::setupCandleStickGraph(QCustomPlot *customPlot)
 
 void MainWindow::ProcessMarketEvent(const MarketEvent &marketEvent)
 {
-    candlesticks->setName(QString::fromStdString(marketEvent.GetSymbol()));
+    static int count = 0;
     candlesticks->addData(marketEvent.GetDate().toTime_t(),
                           marketEvent.GetOpenPrice(),
                           marketEvent.GetHighPrice(),
                           marketEvent.GetLowPrice(),
                           marketEvent.GetClosePrice());
-    ui->customPlot->rescaleAxes();
-    ui->customPlot->replot();
+    if (count % 1000 == 0)
+    {
+        candlesticks->setName(QString::fromStdString(marketEvent.GetSymbol()));
+        ui->customPlot->rescaleAxes();
+        ui->customPlot->replot();
+    }
+    count++;
 }
 
 void MainWindow::Run()
 {
     qRegisterMetaType<MarketEvent>();
     std::unique_ptr<DataProvider> dataProvider = nullptr;
-    bool createdDataProvider = true;
     try {
         DataProviderFactory dataProviderFactory;
         dataProvider = dataProviderFactory.CreateDataProvider(DataSource::YAHOOCSVFILEDATAPROVIDER, "MSFT.csv");
@@ -80,30 +86,24 @@ void MainWindow::Run()
                   << e.what() << "\n";
         std::string error("Unable to continue as could not create data provider. \n" + std::string(e.what()));
         emit ErrorMessage(error);
-        createdDataProvider = false;
+        return;
     }
-    if (createdDataProvider) {
-        std::shared_ptr<Broker> broker(std::make_shared<InteractiveBrokers>());
-        std::shared_ptr<PortfolioHandler> portfolio(std::make_shared<PortfolioHandler>(broker));
-        std::unique_ptr<Strategy> strategy(std::make_unique<BuyAndHoldStrategy>(portfolio));
-
-        QThread* thread = new QThread(this);
-        thread->start();
-        EventLoop* eventLoop = new EventLoop();
-        eventLoop->moveToThread(thread);
-        broker->moveToThread(thread);
-        portfolio->moveToThread(thread);
-        dataProvider->moveToThread(thread);
-        strategy->moveToThread(thread);
-        AssignListeners(broker.get(), portfolio.get(), dataProvider.get(), strategy.get());
-        connect(this, &MainWindow::RunLoop, [&] () {
-            eventLoop->Run(dataProvider.get());
-        });
-
-
-        connect(thread, SIGNAL(destroyed()), eventLoop, SLOT(deleteLater()));
-        emit RunLoop();
-    }
+    std::shared_ptr<Broker> broker(std::make_shared<InteractiveBrokers>());
+    std::shared_ptr<PortfolioHandler> portfolio(std::make_shared<PortfolioHandler>(broker));
+    std::unique_ptr<Strategy> strategy(std::make_unique<BuyAndHoldStrategy>(portfolio));
+    workerThread->start();
+    EventLoop* eventLoop = new EventLoop();
+    eventLoop->moveToThread(workerThread);
+    broker->moveToThread(workerThread);
+    portfolio->moveToThread(workerThread);
+    dataProvider->moveToThread(workerThread);
+    strategy->moveToThread(workerThread);
+    AssignListeners(broker.get(), portfolio.get(), dataProvider.get(), strategy.get());
+    connect(this, &MainWindow::RunLoop, [&] () {
+        eventLoop->Run(dataProvider.get());
+    });
+    //connect(thread, SIGNAL(destroyed()), eventLoop, SLOT(deleteLater()));
+    emit RunLoop();
 }
 
 void MainWindow::AssignListeners(Broker* broker, PortfolioHandler* portfolio, DataProvider* dataProvider, Strategy* strategy) const
@@ -116,5 +116,7 @@ void MainWindow::AssignListeners(Broker* broker, PortfolioHandler* portfolio, Da
 
 MainWindow::~MainWindow()
 {
+    workerThread->quit();
+    workerThread->wait();
     delete ui;
 }
