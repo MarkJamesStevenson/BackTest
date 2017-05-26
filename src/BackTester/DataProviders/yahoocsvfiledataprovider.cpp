@@ -7,6 +7,7 @@
 #include <exception>
 #include <cassert>
 #include "marketevent.h"
+#include <QThread>
 
 void YahooCSVFileDataProvider::Initialise(const std::string &directory)
 {
@@ -28,8 +29,9 @@ void YahooCSVFileDataProvider::Initialise(const std::string &directory)
 void YahooCSVFileDataProvider::UpdateBars()
 {
     assert(DataAvailable() && "Should not call without checking it has data");
-    emit PublishMarketEvent(MarketEvent(bars.front()));
+    MarketEvent event(bars.front());
     bars.pop();
+    emit PublishMarketEvent(event);
 }
 
 bool YahooCSVFileDataProvider::DataAvailable() const

@@ -1,18 +1,21 @@
 #include "eventloop.h"
 #include "dataprovider.h"
-#include <iostream>
-#include <stdlib.h>
-#include <chrono>
-#include <thread>
 
-void EventLoop::Run(DataProvider* dataProvider) const
+void EventLoop::Run() const
 {
-    while (dataProvider->DataAvailable())
+    myTimer->start(1);
+}
+
+void EventLoop::run2() const
+{
+    if (dataProvider->DataAvailable())
     {
         dataProvider->UpdateBars();
-        int milliseconds = 300;
-        //std::cout << "sleeping for " << milliseconds << " milliseconds" << std::endl;
-        //std::this_thread::sleep_for(std::chrono::milliseconds(milliseconds));
+    }
+    else
+    {
+        myTimer->stop();
+        emit EventLoopCompleted();
     }
 }
 

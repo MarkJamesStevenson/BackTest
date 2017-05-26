@@ -26,8 +26,9 @@ void YahooCSVDataProvider::Initialise(const std::string &symbol)
 void YahooCSVDataProvider::UpdateBars()
 {
     assert(DataAvailable() && "Should not call without checking it has data");
-    emit PublishMarketEvent(MarketEvent(bars.back()));
+    MarketEvent event(bars.back());
     bars.pop_back();
+    emit PublishMarketEvent(event);
 }
 
 bool YahooCSVDataProvider::DataAvailable() const

@@ -3,6 +3,8 @@
 
 #include <QApplication>
 #include "marketevent.h"
+#include <QTimer>
+#include <QObject>
 
 class Broker;
 class PortfolioHandler;
@@ -16,18 +18,27 @@ class EventLoop : public QObject
 {
     Q_OBJECT
 public:
-    EventLoop() = default;
+    EventLoop(DataProvider* dataProvider) : dataProvider(dataProvider)
+    {
+        myTimer = new QTimer(this);
+       myTimer->setInterval(1);
+       myTimer->setSingleShot(false);
+       connect(myTimer, SIGNAL(timeout()), this, SLOT(run2()));
+    }
 
-    //void Run(DataProvider *dataProvider) const;
-
-//signals:
-    //void UpdateUIWithMarketEvent(const MarketEvent& marketEvent);
+signals:
+    void EventLoopCompleted() const;
 
 public slots:
-    void Run(DataProvider *dataProvider) const;
+    void Run() const;
 
+private slots:
+    void run2() const;
 private:
     void AssignListeners(Broker *broker, PortfolioHandler *portfolio, DataProvider *dataProvider, Strategy *strategy) const;
+
+    DataProvider* dataProvider;
+    QTimer* myTimer;
 };
 
 #endif // EVENTLOOP_H

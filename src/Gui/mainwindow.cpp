@@ -14,7 +14,6 @@
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
-    workerThread(new QThread(this)),
     errorMessage(new QErrorMessage(this))
 {
     ui->setupUi(this);
@@ -22,7 +21,6 @@ MainWindow::MainWindow(QWidget *parent) :
     setupCandleStickGraph(ui->customPlot);
     setWindowTitle("BackTest");
     statusBar()->clearMessage();
-
     connect(ui->startEventLoop, &QPushButton::released, [=] () {
         Run();
     });
@@ -34,7 +32,8 @@ MainWindow::MainWindow(QWidget *parent) :
 void MainWindow::setupCandleStickGraph(QCustomPlot *customPlot)
 {
     customPlot->legend->setVisible(true);
-
+    customPlot->setInteraction(QCP::iRangeZoom, true);
+    customPlot->setSelectionRectMode(QCP::srmZoom);
     candlesticks = new QCPFinancial(customPlot->xAxis, customPlot->yAxis);
     candlesticks->setChartStyle(QCPFinancial::csCandlestick);
     double binSize = 3600*24; // bin data in 1 day intervals
@@ -65,19 +64,21 @@ void MainWindow::ProcessMarketEvent(const MarketEvent &marketEvent)
                           marketEvent.GetHighPrice(),
                           marketEvent.GetLowPrice(),
                           marketEvent.GetClosePrice());
-    if (count % 1000 == 0)
+    if (count % 100 == 0)
     {
         candlesticks->setName(QString::fromStdString(marketEvent.GetSymbol()));
         ui->customPlot->rescaleAxes();
         ui->customPlot->replot();
+        count = 0;
     }
     count++;
 }
 
 void MainWindow::Run()
 {
+    candlesticks->setData({},{},{},{},{},true);
     qRegisterMetaType<MarketEvent>();
-    std::unique_ptr<DataProvider> dataProvider = nullptr;
+    dataProvider = nullptr;
     try {
         DataProviderFactory dataProviderFactory;
         dataProvider = dataProviderFactory.CreateDataProvider(DataSource::YAHOOCSVFILEDATAPROVIDER, "MSFT.csv");
@@ -88,22 +89,21 @@ void MainWindow::Run()
         emit ErrorMessage(error);
         return;
     }
-    std::shared_ptr<Broker> broker(std::make_shared<InteractiveBrokers>());
-    std::shared_ptr<PortfolioHandler> portfolio(std::make_shared<PortfolioHandler>(broker));
-    std::unique_ptr<Strategy> strategy(std::make_unique<BuyAndHoldStrategy>(portfolio));
-    workerThread->start();
-    EventLoop* eventLoop = new EventLoop();
+    broker = std::make_shared<InteractiveBrokers>();
+    portfolio = std::make_shared<PortfolioHandler>(broker);
+    strategy = std::make_unique<BuyAndHoldStrategy>(portfolio);
+
+    workerThread = new QThread();
+    eventLoop = new EventLoop(dataProvider.get());
     eventLoop->moveToThread(workerThread);
     broker->moveToThread(workerThread);
     portfolio->moveToThread(workerThread);
     dataProvider->moveToThread(workerThread);
     strategy->moveToThread(workerThread);
     AssignListeners(broker.get(), portfolio.get(), dataProvider.get(), strategy.get());
-    connect(this, &MainWindow::RunLoop, [&] () {
-        eventLoop->Run(dataProvider.get());
-    });
-    //connect(thread, SIGNAL(destroyed()), eventLoop, SLOT(deleteLater()));
-    emit RunLoop();
+    connect(workerThread, SIGNAL(started()), eventLoop, SLOT(Run()));
+    connect(eventLoop, SIGNAL(EventLoopCompleted()), workerThread, SLOT(quit()) );
+    workerThread->start();
 }
 
 void MainWindow::AssignListeners(Broker* broker, PortfolioHandler* portfolio, DataProvider* dataProvider, Strategy* strategy) const
@@ -116,7 +116,5 @@ void MainWindow::AssignListeners(Broker* broker, PortfolioHandler* portfolio, Da
 
 MainWindow::~MainWindow()
 {
-    workerThread->quit();
-    workerThread->wait();
     delete ui;
 }

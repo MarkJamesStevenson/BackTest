@@ -12,7 +12,5 @@ void BuyAndHoldStrategy::ProcessMarketEvent(const MarketEvent &marketEvent)
         portfolio->BuyOrderRequest({marketEvent.GetSymbol(),
                                     Event::SignalType::LONG,
                                     marketEvent.GetClosePrice()});
-    } else {
-        std::cout << "strategy has decided to not do any work \n\n";
     }
 }

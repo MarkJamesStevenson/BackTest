@@ -4,6 +4,9 @@
 #include <QMainWindow>
 #include "qcustomplot.h"
 #include "eventloop.h"
+#include <memory>
+#include "dataprovider.h"
+
 
 class ErrorMessage;
 class MarketEvent;
@@ -36,8 +39,13 @@ private slots:
 private:
     Ui::MainWindow *ui;
     QCPFinancial *candlesticks;
-    QThread* workerThread;
     QErrorMessage* errorMessage;
+    EventLoop *eventLoop;
+    QThread* workerThread;
+    std::unique_ptr<DataProvider> dataProvider;
+    std::shared_ptr<Broker> broker;
+    std::shared_ptr<PortfolioHandler> portfolio;
+    std::unique_ptr<Strategy> strategy;
 
     void AssignListeners(Broker *broker, PortfolioHandler *portfolio, DataProvider *dataProvider, Strategy *strategy) const;
 };
