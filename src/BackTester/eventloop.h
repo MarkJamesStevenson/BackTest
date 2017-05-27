@@ -6,11 +6,11 @@
 #include <QTimer>
 #include <QObject>
 #include <memory>
+#include "strategy.h"
 
 class Broker;
 class PortfolioHandler;
 class DataProvider;
-class Strategy;
 class QMainWindow;
 class QString;
 

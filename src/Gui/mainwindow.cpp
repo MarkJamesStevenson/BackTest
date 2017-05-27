@@ -6,7 +6,6 @@
 #include <thread>
 #include <functional>
 #include "dataproviderfactory.h"
-#include <memory>
 #include "interactivebrokers.h"
 #include "buyandholdstrategy.h"
 #include <QErrorMessage>

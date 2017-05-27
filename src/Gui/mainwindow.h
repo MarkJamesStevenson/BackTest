@@ -4,9 +4,6 @@
 #include <QMainWindow>
 #include "qcustomplot.h"
 #include "eventloop.h"
-#include <memory>
-#include "dataprovider.h"
-
 
 class ErrorMessage;
 class MarketEvent;
@@ -43,8 +40,6 @@ private:
     QErrorMessage* errorMessage;
     EventLoop* eventLoop = nullptr;
     QThread* workerThread = nullptr;
-
-    void AssignListeners(Broker *broker, PortfolioHandler *portfolio, DataProvider *dataProvider, Strategy *strategy) const;
 };
 
 #endif // MAINWINDOW_H
