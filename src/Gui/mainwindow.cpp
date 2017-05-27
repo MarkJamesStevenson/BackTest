@@ -67,11 +67,16 @@ void MainWindow::ProcessMarketEvent(const MarketEvent &marketEvent)
     if (count % 100 == 0)
     {
         candlesticks->setName(QString::fromStdString(marketEvent.GetSymbol()));
-        ui->customPlot->rescaleAxes();
-        ui->customPlot->replot();
+        UpdateCandlesticks();
         count = 0;
     }
     count++;
+}
+
+void MainWindow::UpdateCandlesticks()
+{
+    ui->customPlot->rescaleAxes();
+    ui->customPlot->replot();
 }
 
 void MainWindow::Run()
@@ -102,7 +107,8 @@ void MainWindow::Run()
     strategy->moveToThread(workerThread);
     AssignListeners(broker.get(), portfolio.get(), dataProvider.get(), strategy.get());
     connect(workerThread, SIGNAL(started()), eventLoop, SLOT(Run()));
-    connect(eventLoop, SIGNAL(EventLoopCompleted()), workerThread, SLOT(quit()) );
+    connect(eventLoop, SIGNAL(EventLoopCompleted()), this, SLOT(UpdateCandlesticks()));
+    connect(eventLoop, SIGNAL(EventLoopCompleted()), workerThread, SLOT(quit()));
     workerThread->start();
 }
 

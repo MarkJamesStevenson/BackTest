@@ -21,7 +21,6 @@ void PortfolioHandler::ProcessFillEvent(const FillEvent& fillEvent)
 
 void PortfolioHandler::ProcessMarketEvent(const MarketEvent& marketEvent)
 {
-    std::cout << "processing market event in portfolio" << std::endl;
     // We presume the current price is the close price
     double closePrice = marketEvent.GetClosePrice();
     capitalInvested = closePrice * volumeInvested;

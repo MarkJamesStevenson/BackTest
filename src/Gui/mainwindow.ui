@@ -16,7 +16,37 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout_2">
     <item>
-     <layout class="QVBoxLayout" name="verticalLayout">
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <property name="spacing">
+       <number>7</number>
+      </property>
+      <item>
+       <widget class="QComboBox" name="comboBox_3">
+        <item>
+         <property name="text">
+          <string>Interactive Brokers</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="comboBox_2">
+        <item>
+         <property name="text">
+          <string>Yahoo CSV File</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="comboBox">
+        <item>
+         <property name="text">
+          <string comment="Strategy" extracomment="My Strategy">Buy and hold</string>
+         </property>
+        </item>
+       </widget>
+      </item>
       <item>
        <widget class="QPushButton" name="startEventLoop">
         <property name="text">
@@ -58,6 +88,8 @@
     <property name="title">
      <string>test</string>
     </property>
+    <addaction name="separator"/>
+    <addaction name="separator"/>
    </widget>
    <addaction name="menulabel"/>
    <addaction name="menuwhat"/>

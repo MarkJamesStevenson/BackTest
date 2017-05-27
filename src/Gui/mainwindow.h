@@ -32,6 +32,7 @@ signals:
 public slots:
     void ProcessMarketEvent(const MarketEvent& marketEvent);
 
+    void UpdateCandlesticks();
 
 private slots:
     void Run();
