@@ -14,6 +14,7 @@
 class MarketEvent
 {
 public:
+    //Required by qt signals and slots to have a default constructor
     MarketEvent() : dataPoint("",QDateTime(),0,0,0,0,0,0)
     {}
 
