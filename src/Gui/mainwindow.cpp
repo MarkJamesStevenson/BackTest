@@ -83,9 +83,6 @@ void MainWindow::Run()
     workerThread = new QThread();
     eventLoop = new EventLoop();
     eventLoop->moveToThread(workerThread);
-    //connect(eventLoop, &EventLoop::ErrorMessage, [this] (const std::string& output){
-
-    //});
     connect(workerThread, &QThread::started, [this] ()
     {
         eventLoop->Run(this);
