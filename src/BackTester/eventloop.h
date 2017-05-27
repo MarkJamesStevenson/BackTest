@@ -5,40 +5,38 @@
 #include "marketevent.h"
 #include <QTimer>
 #include <QObject>
+#include <memory>
 
 class Broker;
 class PortfolioHandler;
 class DataProvider;
 class Strategy;
 class QMainWindow;
-
-//Q_DECLARE_METATYPE(MarketEvent)
+class QString;
 
 class EventLoop : public QObject
 {
     Q_OBJECT
 public:
-    EventLoop(DataProvider* dataProvider) : dataProvider(dataProvider)
-    {
-        myTimer = new QTimer(this);
-       myTimer->setInterval(1);
-       myTimer->setSingleShot(false);
-       connect(myTimer, SIGNAL(timeout()), this, SLOT(run2()));
-    }
+    EventLoop();
 
 signals:
     void EventLoopCompleted() const;
+    void ErrorMessage(const QString& error);
 
 public slots:
-    void Run() const;
+    void Run(QObject *ui);
 
 private slots:
-    void run2() const;
+    void UpdateBars() const;
 private:
-    void AssignListeners(Broker *broker, PortfolioHandler *portfolio, DataProvider *dataProvider, Strategy *strategy) const;
+    void AssignListeners(Broker *broker, PortfolioHandler *portfolio, DataProvider *dataProvider, Strategy *strategy, QObject *ui) const;
 
-    DataProvider* dataProvider;
-    QTimer* myTimer;
+    QTimer* updateBarsTimer;
+    std::shared_ptr<DataProvider> dataProvider = nullptr;
+    std::shared_ptr<Broker> broker = nullptr;
+    std::shared_ptr<PortfolioHandler> portfolio = nullptr;
+    std::unique_ptr<Strategy> strategy = nullptr;
 };
 
 #endif // EVENTLOOP_H

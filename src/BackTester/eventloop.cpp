@@ -1,12 +1,40 @@
 #include "eventloop.h"
 #include "dataprovider.h"
+#include "broker.h"
+#include "portfoliohandler.h"
+#include "strategy.h"
+#include "buyandholdstrategy.h"
+#include "interactivebrokers.h"
+#include "dataproviderfactory.h"
+#include <string>
 
-void EventLoop::Run() const
+EventLoop::EventLoop() :
+    updateBarsTimer(new QTimer(this))
 {
-    myTimer->start(1);
+    updateBarsTimer->setSingleShot(false);
+    connect(updateBarsTimer, SIGNAL(timeout()), this, SLOT(UpdateBars()));
 }
 
-void EventLoop::run2() const
+void EventLoop::Run(QObject* ui)
+{
+    try {
+        DataProviderFactory dataProviderFactory;
+        dataProvider = dataProviderFactory.CreateDataProvider(DataSource::YAHOOCSVFILEDATAPROVIDER, "MSFT1.csv");
+    } catch (const std::exception& e) {
+        //std::cerr << "Unable to continue as could not create data provider\n"
+        //          << e.what() << "\n";
+        QString error("Unable to continue as could not create data provider. \n" + QString(e.what()));
+        emit ErrorMessage(error);
+        return;
+    }
+    broker = std::make_shared<InteractiveBrokers>();
+    portfolio = std::make_shared<PortfolioHandler>(broker);
+    strategy = std::make_unique<BuyAndHoldStrategy>(portfolio);
+    AssignListeners(broker.get(), portfolio.get(), dataProvider.get(), strategy.get(), ui);
+    updateBarsTimer->start(1);
+}
+
+void EventLoop::UpdateBars() const
 {
     if (dataProvider->DataAvailable())
     {
@@ -14,8 +42,16 @@ void EventLoop::run2() const
     }
     else
     {
-        myTimer->stop();
+        updateBarsTimer->stop();
         emit EventLoopCompleted();
     }
+}
+
+void EventLoop::AssignListeners(Broker* broker, PortfolioHandler* portfolio, DataProvider* dataProvider, Strategy* strategy, QObject* ui) const
+{
+    dataProvider->AssignMarketEventListener(ui);
+    dataProvider->AssignMarketEventListener(portfolio);
+    dataProvider->AssignMarketEventListener(strategy);
+    broker->AssignFillEventListener(portfolio);
 }
 

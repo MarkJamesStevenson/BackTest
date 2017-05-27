@@ -27,13 +27,13 @@ public:
 
 signals:
     void RunLoop();
-    void ErrorMessage(const std::string& error);
 
 public slots:
     void ProcessMarketEvent(const MarketEvent& marketEvent);
 
     void UpdateCandlesticks();
 
+    void DisplayErrorMessage(const QString &error);
 private slots:
     void Run();
 
@@ -41,12 +41,8 @@ private:
     Ui::MainWindow *ui;
     QCPFinancial *candlesticks;
     QErrorMessage* errorMessage;
-    EventLoop *eventLoop;
-    QThread* workerThread;
-    std::unique_ptr<DataProvider> dataProvider;
-    std::shared_ptr<Broker> broker;
-    std::shared_ptr<PortfolioHandler> portfolio;
-    std::unique_ptr<Strategy> strategy;
+    EventLoop* eventLoop = nullptr;
+    QThread* workerThread = nullptr;
 
     void AssignListeners(Broker *broker, PortfolioHandler *portfolio, DataProvider *dataProvider, Strategy *strategy) const;
 };

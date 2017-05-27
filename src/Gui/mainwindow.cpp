@@ -21,11 +21,8 @@ MainWindow::MainWindow(QWidget *parent) :
     setupCandleStickGraph(ui->customPlot);
     setWindowTitle("BackTest");
     statusBar()->clearMessage();
-    connect(ui->startEventLoop, &QPushButton::released, [=] () {
+    connect(ui->startEventLoop, &QPushButton::released, [this] () {
         Run();
-    });
-    connect(this, &MainWindow::ErrorMessage, [=] (const std::string& output){
-        errorMessage->showMessage(QString::fromStdString(output));
     });
 }
 
@@ -83,41 +80,29 @@ void MainWindow::Run()
 {
     candlesticks->setData({},{},{},{},{},true);
     qRegisterMetaType<MarketEvent>();
-    dataProvider = nullptr;
-    try {
-        DataProviderFactory dataProviderFactory;
-        dataProvider = dataProviderFactory.CreateDataProvider(DataSource::YAHOOCSVFILEDATAPROVIDER, "MSFT.csv");
-    } catch (const std::exception& e) {
-        std::cerr << "Unable to continue as could not create data provider\n"
-                  << e.what() << "\n";
-        std::string error("Unable to continue as could not create data provider. \n" + std::string(e.what()));
-        emit ErrorMessage(error);
-        return;
-    }
-    broker = std::make_shared<InteractiveBrokers>();
-    portfolio = std::make_shared<PortfolioHandler>(broker);
-    strategy = std::make_unique<BuyAndHoldStrategy>(portfolio);
-
     workerThread = new QThread();
-    eventLoop = new EventLoop(dataProvider.get());
+    eventLoop = new EventLoop();
     eventLoop->moveToThread(workerThread);
-    broker->moveToThread(workerThread);
-    portfolio->moveToThread(workerThread);
-    dataProvider->moveToThread(workerThread);
-    strategy->moveToThread(workerThread);
-    AssignListeners(broker.get(), portfolio.get(), dataProvider.get(), strategy.get());
-    connect(workerThread, SIGNAL(started()), eventLoop, SLOT(Run()));
+    //connect(eventLoop, &EventLoop::ErrorMessage, [this] (const std::string& output){
+
+    //});
+    connect(workerThread, &QThread::started, [this] ()
+    {
+        eventLoop->Run(this);
+    });
+    connect(eventLoop, SIGNAL(ErrorMessage(const QString&)), this, SLOT(DisplayErrorMessage(const QString&)));
     connect(eventLoop, SIGNAL(EventLoopCompleted()), this, SLOT(UpdateCandlesticks()));
     connect(eventLoop, SIGNAL(EventLoopCompleted()), workerThread, SLOT(quit()));
+    connect(eventLoop, &EventLoop::EventLoopCompleted, [this] ()
+    {
+       delete eventLoop;
+    });
     workerThread->start();
 }
 
-void MainWindow::AssignListeners(Broker* broker, PortfolioHandler* portfolio, DataProvider* dataProvider, Strategy* strategy) const
+void MainWindow::DisplayErrorMessage(const QString& error)
 {
-    dataProvider->AssignMarketEventListener(this);
-    dataProvider->AssignMarketEventListener(portfolio);
-    dataProvider->AssignMarketEventListener(strategy);
-    broker->AssignFillEventListener(portfolio);
+    errorMessage->showMessage(error);
 }
 
 MainWindow::~MainWindow()
