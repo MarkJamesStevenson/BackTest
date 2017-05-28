@@ -19,7 +19,7 @@ void EventLoop::Run(QObject* ui)
 {
     try {
         DataProviderFactory dataProviderFactory;
-        dataProvider = dataProviderFactory.CreateDataProvider(DataSource::YAHOOCSVFILEDATAPROVIDER, "MSFT1.csv");
+        dataProvider = dataProviderFactory.CreateDataProvider(DataSource::YAHOOCSVFILEDATAPROVIDER, "MSFT.csv");
     } catch (const std::exception& e) {
         QString error("Unable to continue as could not create data provider. \n" + QString(e.what()));
         emit ErrorMessage(error);
