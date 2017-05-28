@@ -8,6 +8,10 @@ stock data must be downloaded manually from yahoo finance. e.g. MSFT historical 
 here [MSFT][].
 To use your own stock data you can derive from the dataprovider class.
 
+![Alt text](screenshots/MSFT_enlarged.png?raw=true)
+
+![Alt text](screenshots/MSFT_full_plot.png?raw=true)
+
 ## Dependencies
 To build and run BackTest the following dependencies must first be installed:
 - Qt5
