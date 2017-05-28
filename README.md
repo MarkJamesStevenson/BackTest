@@ -8,6 +8,8 @@ stock data must be downloaded manually from yahoo finance. e.g. MSFT historical 
 here [MSFT][].
 To use your own stock data you can derive from the dataprovider class.
 
+To write your own strategy, derive from the strategy class. A basic example is given with the BuyAndHoldStrategy class.
+
 ## Example screenshots
 
 A full backtest of MSFT is shown below:
