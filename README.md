@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/Markoprolo/BackTest.svg?branch=master)](https://travis-ci.org/Markoprolo/BackTest)
+[![Build Status](https://travis-ci.org/MarkJamesStevenson/BackTest.svg?branch=master)](https://travis-ci.org/MarkJamesStevenson/BackTest)
 
 Test trading strategies with historical data.
 
